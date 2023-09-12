@@ -40,3 +40,5 @@
 //MARK: - CityVC
 "CityVC.TopBar.DismissButton.Title" = "Cancel";
 "CityVC.TopBar.AddButton.Title" = "Add";
+"CityVC.Popover.CelsiusItem.Title" = "Celsius        °C";
+"CityVC.Popover.FahrenheitItem.Title" = "Fahrenheit  °F";

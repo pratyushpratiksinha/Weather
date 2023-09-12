@@ -125,8 +125,8 @@ private extension CityListVC {
 private extension CityListVC {
     
     func setupPopoverItems(fahrenheitItem isSelected: Bool = true) {
-        celsiusItem = TemperatureScaleOptionItem(text: "Celsius        °C", isSelected: !isSelected)
-        fahrenheitItem = TemperatureScaleOptionItem(text: "Fahrenheit  °F", isSelected: isSelected)
+        celsiusItem = TemperatureScaleOptionItem(text: "CityVC.Popover.CelsiusItem.Title".localized, isSelected: !isSelected)
+        fahrenheitItem = TemperatureScaleOptionItem(text: "CityVC.Popover.FahrenheitItem.Title".localized, isSelected: isSelected)
     }
     
     func setupBinding() {
