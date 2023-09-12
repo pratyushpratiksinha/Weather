@@ -177,10 +177,12 @@ private extension CityListVC {
 
 extension CityListVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row <= (viewModel.cityList.value?.count ?? 0) - 1 {
-            let cityVC = CityVC()
-            cityVC.navigationItemTitle = viewModel.cityList.value?[indexPath.row].cityName
-            self.navigationController?.pushViewController(cityVC, animated: true)
+        if let value = viewModel.cityList.value {
+            if indexPath.row <= value.count - 1 {
+                let cityVC = CityVC()
+                cityVC.navigationItemTitle = viewModel.cityList.value?[indexPath.row].cityName
+                self.navigationController?.pushViewController(cityVC, animated: true)
+            }
         }
     }
     

@@ -10,3 +10,7 @@ import Foundation
 enum ReusableIdentifierTVC: String {
     case CityTVC = "CityTVC"
 }
+
+enum ReusableIdentifierCVC: String {
+    case CityPrimaryWeatherDataCVC = "CityPrimaryWeatherDataCVC"
+}

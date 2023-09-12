@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - CityWeatherResponse
+// MARK: - CityWeatherRequest
 struct CityWeatherRequest: Encodable {
     let lat: String
     let lon: String

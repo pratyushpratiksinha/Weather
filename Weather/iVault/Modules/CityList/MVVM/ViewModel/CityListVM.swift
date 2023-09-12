@@ -8,12 +8,7 @@
 import Foundation
 import CoreLocation
 
-enum TemperatureScale {
-    case celsius
-    case fahrenheit
-}
-
-class CityListVM: APIServiceProvider {
+class CityListVM: APIServiceProvider, TemperatureScaleConversionDataSource {
     private(set) lazy var cityList = Bindable<[CityTVCModel]>()
     private(set) var alert = Bindable<(String, String)>()
     private(set) var error = Bindable<NetworkError>()
@@ -39,18 +34,6 @@ extension CityListVM {
             }
         }
     }
-    
-    final private func convertCelsiusToFahrenheit(_ c: Double) -> Double {
-        return (c * 9/5) + 32
-    }
-    
-    final private func convertFahrenheitToCelsius(_ f: Double) -> Double {
-        return (f - 32) * 5/9
-    }
-    
-    final private func convertKelvinToCelsius(_ k: Double) -> Double {
-        return k - 273.15
-    }
 }
 
 //handling weather API
@@ -69,7 +52,7 @@ extension CityListVM {
                     let element = CityTVCModel(id: city.id,
                                                cityName: city.name,
                                                countryName: city.sys.country,
-                                               weatherDescription: city.weather[0].description ?? "",
+                                               weatherDescription: city.weather?[0].description ?? "",
                                                temperatureCurrent: self.temperatureScale == .celsius ? temperatureCurrentInCelcius : self.convertCelsiusToFahrenheit(temperatureCurrentInCelcius),
                                                temperatureHigh: self.temperatureScale == .celsius ? temperatureHighInCelcius : self.convertCelsiusToFahrenheit(temperatureHighInCelcius),
                                                temperatureLow: self.temperatureScale == .celsius ? temperatureLowInCelcius : self.convertCelsiusToFahrenheit(temperatureLowInCelcius))

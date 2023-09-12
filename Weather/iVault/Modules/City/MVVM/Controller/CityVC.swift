@@ -43,6 +43,13 @@ class CityVC: UIViewController {
         return btn
     }()
     
+    private let collectionView: UICollectionView = {
+        let collectionView = UICollectionView()
+        collectionView.backgroundColor = .clear
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        return collectionView
+    }()
+    
     var delegate: CityDetailTopBarDelegate?
     var navigationItemTitle: String?
 
@@ -72,6 +79,7 @@ private extension CityVC {
         if self.isBeingPresented {
             setupTopBar()
         }
+        setupCollectionView()
     }
     
     func setupNavigationBar() {
@@ -114,6 +122,19 @@ private extension CityVC {
         ])
         addButton.addTarget(self, action: #selector(buttonCTAAdd), for: .touchUpInside)
     }
+    
+    func setupCollectionView() {
+        view.addSubview(collectionView)
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 16),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+        collectionView.delegate = self
+//        collectionView.dataSource = cityListDataSource
+//        collectionView.register(CityTVC.self, forCellReuseIdentifier: ReusableIdentifierTVC.CityTVC.rawValue)
+    }
 }
 
 private extension CityVC {
@@ -126,4 +147,8 @@ private extension CityVC {
         delegate?.onAddButtonCTA()
         self.dismiss(animated: true)
     }
+}
+
+extension CityVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    
 }
