@@ -23,6 +23,9 @@
 "Alert.Ok.title" = "Ok";
 "Alert.Cancel.title" = "Cancel";
 
+//MARK: - NilData
+"NilDataView.Label.Text" = "No data available";
+
 //MARK: - CityListVC
 "CityListVC.NavigationItem.Title" = "Weather";
 "CityListVC.SearchBar.Placeholder" = "Enter zipcode";
@@ -33,3 +36,7 @@
 "CityListVM.Alert.CityAlreadyAvailable.Message" = "City is already available in the list.";
 "CityListVM.Alert.Faliure.Title" = "Error";
 "CityListVM.Alert.ZipcodeNotAvailable.Message" = "Zipcode not available.";
+
+//MARK: - CityVC
+"CityVC.TopBar.DismissButton.Title" = "Cancel";
+"CityVC.TopBar.AddButton.Title" = "Add";

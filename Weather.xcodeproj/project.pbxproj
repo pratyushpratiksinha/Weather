@@ -19,7 +19,7 @@
 		81ECAE5C2AAF072B0086E341 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81ECAE582AAF072B0086E341 /* AppDelegate.swift */; };
 		81ECAE5D2AAF072B0086E341 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81ECAE592AAF072B0086E341 /* SceneDelegate.swift */; };
 		81ECAE692AAF08170086E341 /* CityListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81ECAE682AAF08170086E341 /* CityListVC.swift */; };
-		81ECAE6B2AAF08530086E341 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81ECAE6A2AAF08530086E341 /* HomeVC.swift */; };
+		81ECAE6B2AAF08530086E341 /* CityVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81ECAE6A2AAF08530086E341 /* CityVC.swift */; };
 		81ECAE782AAF0C070086E341 /* BaseUrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81ECAE6D2AAF0C070086E341 /* BaseUrl.swift */; };
 		81ECAE792AAF0C070086E341 /* URN.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81ECAE6F2AAF0C070086E341 /* URN.swift */; };
 		81ECAE7A2AAF0C070086E341 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81ECAE702AAF0C070086E341 /* APIService.swift */; };
@@ -44,6 +44,10 @@
 		81F4F00D2AAF768E007C4C41 /* CityWeatherRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F4F00C2AAF768E007C4C41 /* CityWeatherRequest.swift */; };
 		81F4F00F2AAF7AD1007C4C41 /* Encodable+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F4F00E2AAF7AD1007C4C41 /* Encodable+Extension.swift */; };
 		81F4F0112AAF7D67007C4C41 /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F4F0102AAF7D67007C4C41 /* Double+Extension.swift */; };
+		81F971D32AB0603900DC8F6D /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F971D22AB0603900DC8F6D /* UIColor+Extension.swift */; };
+		81F971D52AB0747C00DC8F6D /* NilDataHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F971D42AB0747C00DC8F6D /* NilDataHandler.swift */; };
+		81F971D72AB07AB900DC8F6D /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F971D62AB07AB900DC8F6D /* Location.swift */; };
+		81F971DB2AB09D9400DC8F6D /* Popover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F971DA2AB09D9400DC8F6D /* Popover.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,7 +84,7 @@
 		81ECAE582AAF072B0086E341 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		81ECAE592AAF072B0086E341 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		81ECAE682AAF08170086E341 /* CityListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityListVC.swift; sourceTree = "<group>"; };
-		81ECAE6A2AAF08530086E341 /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
+		81ECAE6A2AAF08530086E341 /* CityVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityVC.swift; sourceTree = "<group>"; };
 		81ECAE6D2AAF0C070086E341 /* BaseUrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseUrl.swift; sourceTree = "<group>"; };
 		81ECAE6F2AAF0C070086E341 /* URN.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URN.swift; sourceTree = "<group>"; };
 		81ECAE702AAF0C070086E341 /* APIService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
@@ -107,6 +111,10 @@
 		81F4F00C2AAF768E007C4C41 /* CityWeatherRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityWeatherRequest.swift; sourceTree = "<group>"; };
 		81F4F00E2AAF7AD1007C4C41 /* Encodable+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+Extension.swift"; sourceTree = "<group>"; };
 		81F4F0102AAF7D67007C4C41 /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
+		81F971D22AB0603900DC8F6D /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
+		81F971D42AB0747C00DC8F6D /* NilDataHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NilDataHandler.swift; sourceTree = "<group>"; };
+		81F971D62AB07AB900DC8F6D /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		81F971DA2AB09D9400DC8F6D /* Popover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Popover.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -204,26 +212,26 @@
 		81ECAE522AAF072B0086E341 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
-				81ECAE532AAF072B0086E341 /* Home */,
-				81ECAE542AAF072B0086E341 /* City */,
+				81ECAE532AAF072B0086E341 /* City */,
+				81ECAE542AAF072B0086E341 /* CityList */,
 			);
 			path = Modules;
 			sourceTree = "<group>";
 		};
-		81ECAE532AAF072B0086E341 /* Home */ = {
+		81ECAE532AAF072B0086E341 /* City */ = {
 			isa = PBXGroup;
 			children = (
 				81ECAE5E2AAF07610086E341 /* MVVM */,
 			);
-			path = Home;
+			path = City;
 			sourceTree = "<group>";
 		};
-		81ECAE542AAF072B0086E341 /* City */ = {
+		81ECAE542AAF072B0086E341 /* CityList */ = {
 			isa = PBXGroup;
 			children = (
 				81ECAE5F2AAF076B0086E341 /* MVVM */,
 			);
-			path = City;
+			path = CityList;
 			sourceTree = "<group>";
 		};
 		81ECAE552AAF072B0086E341 /* Resources */ = {
@@ -277,7 +285,7 @@
 		81ECAE612AAF07C70086E341 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				81ECAE6A2AAF08530086E341 /* HomeVC.swift */,
+				81ECAE6A2AAF08530086E341 /* CityVC.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -387,6 +395,7 @@
 				81ECAE882AAF104F0086E341 /* String+Extension.swift */,
 				81F4F00E2AAF7AD1007C4C41 /* Encodable+Extension.swift */,
 				81F4F0102AAF7D67007C4C41 /* Double+Extension.swift */,
+				81F971D22AB0603900DC8F6D /* UIColor+Extension.swift */,
 			);
 			path = Decorator;
 			sourceTree = "<group>";
@@ -399,6 +408,9 @@
 				81ECAE9A2AAF2CAC0086E341 /* Bindable.swift */,
 				81C0A4712AAFA985009319D7 /* Alert.swift */,
 				81C0A4732AAFB4F3009319D7 /* Loader.swift */,
+				81F971D42AB0747C00DC8F6D /* NilDataHandler.swift */,
+				81F971D62AB07AB900DC8F6D /* Location.swift */,
+				81F971DA2AB09D9400DC8F6D /* Popover.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -612,11 +624,15 @@
 				81ECAE7B2AAF0C070086E341 /* APIClient.swift in Sources */,
 				81ECAE7A2AAF0C070086E341 /* APIService.swift in Sources */,
 				81F4F00D2AAF768E007C4C41 /* CityWeatherRequest.swift in Sources */,
+				81F971DB2AB09D9400DC8F6D /* Popover.swift in Sources */,
 				81C0A4722AAFA985009319D7 /* Alert.swift in Sources */,
 				81ECAE952AAF18880086E341 /* Configuration.swift in Sources */,
 				81F4F00F2AAF7AD1007C4C41 /* Encodable+Extension.swift in Sources */,
+				81F971D52AB0747C00DC8F6D /* NilDataHandler.swift in Sources */,
+				81F971D72AB07AB900DC8F6D /* Location.swift in Sources */,
 				81C0A4742AAFB4F3009319D7 /* Loader.swift in Sources */,
-				81ECAE6B2AAF08530086E341 /* HomeVC.swift in Sources */,
+				81ECAE6B2AAF08530086E341 /* CityVC.swift in Sources */,
+				81F971D32AB0603900DC8F6D /* UIColor+Extension.swift in Sources */,
 				81ECAE5C2AAF072B0086E341 /* AppDelegate.swift in Sources */,
 				81F4F0112AAF7D67007C4C41 /* Double+Extension.swift in Sources */,
 				81F4EFFC2AAF32FA007C4C41 /* CityWeatherResponse.swift in Sources */,
@@ -791,6 +807,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -818,6 +835,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

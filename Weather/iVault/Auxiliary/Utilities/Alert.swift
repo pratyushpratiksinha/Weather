@@ -9,12 +9,12 @@ import UIKit
 
 typealias AlertAction = (UIAlertAction) -> Void
 
-protocol AlertDisplaying {
+protocol DisplayAlertDelegate {
     func displayAlert(title: String, message: String)
     func displayAlertWithAction(title: String?, message: String?, action: AlertAction?)
 }
 
-extension AlertDisplaying where Self: UIViewController {
+extension DisplayAlertDelegate where Self: UIViewController {
     
     func displayAlert(title: String, message: String) {
         displayAlert(title: title,

@@ -11,12 +11,12 @@ fileprivate struct LoaderDisplayingConstants {
     fileprivate static let loadingView = "LoaderDisplayingLoadingView"
 }
 
-protocol LoaderDisplaying {
+protocol DisplayLoaderDelegate {
     func showLoadingView()
     func hideLoadingView()
 }
 
-extension LoaderDisplaying where Self: UIViewController {
+extension DisplayLoaderDelegate where Self: UIViewController {
     
     func showLoadingView() {
         let loadingView = LoadingView()

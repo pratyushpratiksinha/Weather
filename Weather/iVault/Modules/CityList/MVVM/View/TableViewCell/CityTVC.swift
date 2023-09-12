@@ -13,9 +13,9 @@ struct CityTVCModel: Hashable {
     let cityName: String
     let countryName: String
     let weatherDescription: String
-    let temperatureCurrent: Double
-    let temperatureHigh: Double
-    let temperatureLow: Double
+    var temperatureCurrent: Double
+    var temperatureHigh: Double
+    var temperatureLow: Double
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
@@ -29,7 +29,7 @@ struct CityTVCModel: Hashable {
 
 class CityTVC: UITableViewCell {
     
-    let customView: UIView = {
+    private let customView: UIView = {
         let view = UIView()
         view.backgroundColor = .gray
         view.layer.cornerRadius = 10.0
@@ -37,7 +37,7 @@ class CityTVC: UITableViewCell {
         return view
     }()
     
-    let cityNameLabel : UILabel = {
+    private let cityNameLabel : UILabel = {
         let lbl = UILabel()
         lbl.textColor = .white
         lbl.numberOfLines = 1
@@ -47,7 +47,7 @@ class CityTVC: UITableViewCell {
         return lbl
     }()
     
-    let countryNameLabel : UILabel = {
+    private let countryNameLabel : UILabel = {
         let lbl = UILabel()
         lbl.textColor = .white
         lbl.numberOfLines = 1
@@ -57,7 +57,7 @@ class CityTVC: UITableViewCell {
         return lbl
     }()
     
-    let weatherDescriptionLabel : UILabel = {
+    private let weatherDescriptionLabel : UILabel = {
         let lbl = UILabel()
         lbl.textColor = .white
         lbl.numberOfLines = 1
@@ -67,7 +67,7 @@ class CityTVC: UITableViewCell {
         return lbl
     }()
     
-    let temperatureCurrentLabel : UILabel = {
+    private let temperatureCurrentLabel : UILabel = {
         let lbl = UILabel()
         lbl.textColor = .white
         lbl.numberOfLines = 1
@@ -77,7 +77,7 @@ class CityTVC: UITableViewCell {
         return lbl
     }()
     
-    let temperatureHighLowLabel : UILabel = {
+    private let temperatureHighLowLabel : UILabel = {
         let lbl = UILabel()
         lbl.textColor = .white
         lbl.numberOfLines = 1
