@@ -1,5 +1,5 @@
 //
-//  CityForecastResponse.swift
+//  CityWeatherForecastResponse.swift
 //  Weather
 //
 //  Created by Pratyush Pratik Sinha on 12/09/23.
@@ -7,14 +7,15 @@
 
 import Foundation
 
-struct CityForecastResponse: Decodable {
+// MARK: - CityWeatherForecastResponse
+struct CityWeatherForecastResponse: Decodable {
     let cod: String?
     let message, cnt: Int?
     let list: [List]?
     let city: City?
 }
 
-extension CityForecastResponse {
+extension CityWeatherForecastResponse {
     // MARK: - City
     struct City: Decodable {
         let id: Int?
@@ -42,14 +43,14 @@ extension CityForecastResponse {
     }
 }
 
-extension CityForecastResponse.City {
+extension CityWeatherForecastResponse.City {
     // MARK: - Coord
     struct Coord: Decodable {
         let lat, lon: Double?
     }
 }
 
-extension CityForecastResponse.List {
+extension CityWeatherForecastResponse.List {
     // MARK: - Clouds
     struct Clouds: Decodable {
         let all: Int?

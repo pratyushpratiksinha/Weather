@@ -17,6 +17,7 @@ extension WeatherExerciseNetworkURN {
     }
 }
 
+//weather data URN
 struct GETWeatherDataURN: WeatherExerciseNetworkURN {
     
     var location: CLLocation
@@ -44,6 +45,7 @@ struct GETWeatherDataURN: WeatherExerciseNetworkURN {
     }
 }
 
+//geo data URN
 struct GETGeoDataURN: WeatherExerciseNetworkURN {
     
     var zip: String
@@ -63,6 +65,36 @@ struct GETGeoDataURN: WeatherExerciseNetworkURN {
         let appId: String = try! Configuration.value(for: .appId)
         
         if let params = GeoRequest(zip: zip, appid: appId).toDictionary as? [String: String] {
+            return params
+        } else {
+            return nil
+        }
+    }
+}
+
+//forecast data URN
+struct GETWeatherForecastDataURN: WeatherExerciseNetworkURN {
+    
+    var location: CLLocation
+    var count: Int
+    
+    typealias Derived = CityWeatherForecastResponse
+    
+    var baseURL: BaseUrl {
+        return .base
+    }
+    
+    var endPoint: EndPoints {
+        return .forecast
+    }
+    
+    var parameters: [String : String]? {
+        let lat: String = "\(location.coordinate.latitude.rounded(toPlaces: 2))"
+        let lng: String = "\(location.coordinate.longitude.rounded(toPlaces: 2))"
+        let appId: String = try! Configuration.value(for: .appId)
+        
+        let cnt: String = "\(count)"
+        if let params = CityWeatherForecastRequest(lat: lat, lon: lng, appid: appId, cnt: cnt).toDictionary as? [String: String] {
             return params
         } else {
             return nil
