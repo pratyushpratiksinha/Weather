@@ -11,6 +11,7 @@ import CoreLocation
 fileprivate enum ElementOperation {
     case added
     case deleted
+    case updated
     case none
 }
 
@@ -55,7 +56,6 @@ class CityListVC: UIViewController {
     
     private var celsiusItem: TemperatureScaleOptionItem?
     private var fahrenheitItem: TemperatureScaleOptionItem?
-    private var isTemperatureScaleChanged = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -124,15 +124,15 @@ private extension CityListVC {
 
 private extension CityListVC {
     
-    func setupPopoverItems(fahrenheitItem isSelected: Bool = true) {
-        celsiusItem = TemperatureScaleOptionItem(text: "CityVC.Popover.CelsiusItem.Title".localized, isSelected: !isSelected)
-        fahrenheitItem = TemperatureScaleOptionItem(text: "CityVC.Popover.FahrenheitItem.Title".localized, isSelected: isSelected)
+    func setupPopoverItems(celsiusItem isSelected: Bool = true) {
+        celsiusItem = TemperatureScaleOptionItem(text: "CityVC.Popover.CelsiusItem.Title".localized, isSelected: isSelected)
+        fahrenheitItem = TemperatureScaleOptionItem(text: "CityVC.Popover.FahrenheitItem.Title".localized, isSelected: !isSelected)
     }
     
     func setupBinding() {
         viewModel.cityList.bind { [weak self] (value) in
             guard let self = self else { return }
-            if value?.isEmpty == false && self.elementOperation != .deleted && self.isTemperatureScaleChanged == false {
+            if value?.isEmpty == false && self.elementOperation != .deleted && self.elementOperation != .updated {
                 DispatchQueue.main.async {
                     self.stopLoaderAnimation()
                     
@@ -148,7 +148,6 @@ private extension CityListVC {
                     self.present(cityVC, animated: true)
                 }
             } else {
-                self.isTemperatureScaleChanged = false
                 self.cityListUpdateSnapshot()
             }
             self.elementOperation = .none
@@ -305,21 +304,25 @@ extension CityListVC: CityDetailTopBarDelegate {
 extension CityListVC: UIPopoverPresentationControllerDelegate, PopoverOptionItemListVCDelegate {
     func optionItemListViewController(_ controller: PopoverOptionItemListVC, didSelectOptionItem item: PopoverOptionItem) {
         if let item = item as? TemperatureScaleOptionItem {
-            setupPopoverItems(fahrenheitItem: item.text == fahrenheitItem?.text)
-            if item.text == fahrenheitItem?.text {
+            setupPopoverItems(celsiusItem: item.text == celsiusItem?.text)
+            
+            switch item.text {
+            case fahrenheitItem?.text:
                 if viewModel.temperatureScale == .fahrenheit {
                     return
                 } else {
-                    isTemperatureScaleChanged = true
+                    elementOperation = .updated
                     viewModel.displayConvertedTemperature(temperatureScale: .fahrenheit)
                 }
-            } else {
+            case celsiusItem?.text:
                 if viewModel.temperatureScale == .celsius {
                     return
                 } else {
-                    isTemperatureScaleChanged = true
+                    elementOperation = .updated
                     viewModel.displayConvertedTemperature(temperatureScale: .celsius)
                 }
+            default:
+                return
             }
         }
         controller.dismiss(animated: false)

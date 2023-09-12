@@ -18,7 +18,7 @@ class CityListVM: APIServiceProvider {
     lazy var cityList = Bindable<[CityTVCModel]>()
     var alert = Bindable<(String, String)>()
     var error = Bindable<NetworkError>()
-    var temperatureScale: TemperatureScale = .fahrenheit
+    var temperatureScale: TemperatureScale = .celsius
 }
 
 extension CityListVM {
@@ -48,6 +48,10 @@ extension CityListVM {
     final private func convertFahrenheitToCelsius(_ f: Double) -> Double {
         return (f - 32) * 5/9
     }
+    
+    final private func convertKelvinToCelsius(_ k: Double) -> Double {
+        return k - 273.15
+    }
 }
 
 //handling weather API
@@ -60,13 +64,16 @@ extension CityListVM {
                 print(city)
                 DispatchQueue.global(qos: .userInteractive).async { [weak self] in
                     guard let self = self else { return }
+                    let temperatureCurrentInCelcius = self.convertKelvinToCelsius(city.main.temp)
+                    let temperatureHighInCelcius = self.convertKelvinToCelsius(city.main.tempMax)
+                    let temperatureLowInCelcius = self.convertKelvinToCelsius(city.main.tempMin)
                     let element = CityTVCModel(id: city.id,
                                                cityName: city.name,
                                                countryName: city.sys.country,
                                                weatherDescription: city.weather[0].description ?? "",
-                                               temperatureCurrent: self.temperatureScale == .fahrenheit ? city.main.temp : self.convertFahrenheitToCelsius(city.main.temp),
-                                               temperatureHigh: self.temperatureScale == .fahrenheit ? city.main.tempMax : self.convertFahrenheitToCelsius(city.main.tempMax),
-                                               temperatureLow: self.temperatureScale == .fahrenheit ? city.main.tempMin : self.convertFahrenheitToCelsius(city.main.tempMin))
+                                               temperatureCurrent: self.temperatureScale == .celsius ? temperatureCurrentInCelcius : self.convertCelsiusToFahrenheit(temperatureCurrentInCelcius),
+                                               temperatureHigh: self.temperatureScale == .celsius ? temperatureHighInCelcius : self.convertCelsiusToFahrenheit(temperatureHighInCelcius),
+                                               temperatureLow: self.temperatureScale == .celsius ? temperatureLowInCelcius : self.convertCelsiusToFahrenheit(temperatureLowInCelcius))
                     if self.cityList.value == nil {
                         self.cityList.value = [element]
                     } else {
