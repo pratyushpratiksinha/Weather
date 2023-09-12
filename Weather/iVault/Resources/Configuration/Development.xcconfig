@@ -1,0 +1,17 @@
+//
+//  Development.xcconfig
+//  Weather
+//
+//  Created by Pratyush Pratik Sinha on 11/09/23.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+//MARK: Server URL
+API_BASE_URL = api.openweathermap.org/data/2.5
+API_GEO_URL = api.openweathermap.org/geo/1.0
+
+//MARK: API Key
+API_KEY = ac08ac7868952ee898d6319fbf618fff
+

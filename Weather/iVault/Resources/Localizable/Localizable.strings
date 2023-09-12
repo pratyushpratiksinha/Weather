@@ -1,0 +1,35 @@
+/* 
+  Localizable.strings
+  Weather
+
+  Created by Pratyush Pratik Sinha on 11/09/23.
+  
+*/
+
+//MARK: - NetworkError
+"Network.Error.NoInternet" = "No internet";
+"Network.Error.Text" = "Error";
+"Network.Error.UnableToFindBaseURL" = "Unable to find base URL";
+"Network.Error.TimedOut" = "Timed out";
+"Network.Error.CannotConnectToHost" = "Cannot connect to host";
+"Network.Error.UnknownError" = "Unknown error";
+"Network.Error.UnknownStatusCode" = "Unknown status code";
+"Network.Error.ParsingError" = "Parsing error";
+"Network.Error.ServerError" = "Server error";
+"Network.Error.BadServerResponse" = "Bad server response";
+"Network.Error.JSONParametersNotGenerated" = "JSON parameters not generated";
+
+//MARK: - Alert
+"Alert.Ok.title" = "Ok";
+"Alert.Cancel.title" = "Cancel";
+
+//MARK: - CityListVC
+"CityListVC.NavigationItem.Title" = "Weather";
+"CityListVC.SearchBar.Placeholder" = "Enter zipcode";
+"CityListVC.TableView.DeleteSwipeAction.Title" = "Delete";
+
+//MARK: - CityListVM
+"CityListVM.Alert.CityAlreadyAvailable.Title" = "Alert";
+"CityListVM.Alert.CityAlreadyAvailable.Message" = "City is already available in the list.";
+"CityListVM.Alert.Faliure.Title" = "Error";
+"CityListVM.Alert.ZipcodeNotAvailable.Message" = "Zipcode not available.";
