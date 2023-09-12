@@ -14,11 +14,10 @@ enum TemperatureScale {
 }
 
 class CityListVM: APIServiceProvider {
-        
-    lazy var cityList = Bindable<[CityTVCModel]>()
-    var alert = Bindable<(String, String)>()
-    var error = Bindable<NetworkError>()
-    var temperatureScale: TemperatureScale = .celsius
+    private(set) lazy var cityList = Bindable<[CityTVCModel]>()
+    private(set) var alert = Bindable<(String, String)>()
+    private(set) var error = Bindable<NetworkError>()
+    private(set) var temperatureScale: TemperatureScale = .celsius
 }
 
 extension CityListVM {

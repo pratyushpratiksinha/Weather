@@ -8,7 +8,6 @@
 import UIKit
 
 struct CityTVCModel: Hashable {
-
     let id: Int
     let cityName: String
     let countryName: String

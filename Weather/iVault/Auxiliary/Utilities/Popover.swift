@@ -76,7 +76,7 @@ class PopoverOptionItemListVC: UIViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "UITableViewCell")
     }
     
-    func calculateAndSetPreferredContentSize() {
+    private func calculateAndSetPreferredContentSize() {
         let approxAccessoryViewWidth: CGFloat = 56
         let maxWidth = items.flatMap{ $0 }.reduce(0) { $1.sizeForDisplayText().width + approxAccessoryViewWidth > $0 ? $1.sizeForDisplayText().width + 56 : $0 }
         let totalItems = CGFloat(items.flatMap{ $0 }.count)
