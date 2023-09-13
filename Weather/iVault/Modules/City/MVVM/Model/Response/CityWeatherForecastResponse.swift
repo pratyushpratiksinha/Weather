@@ -18,7 +18,7 @@ struct CityWeatherForecastResponse: Decodable {
 extension CityWeatherForecastResponse {
     // MARK: - City
     struct City: Decodable {
-        let id: Int?
+        let id: Int
         let name: String?
         let coord: Coord?
         let country: String?
@@ -27,8 +27,8 @@ extension CityWeatherForecastResponse {
     
     // MARK: - List
     struct CityWeather: Decodable, Hashable {
-        let dt: Int?
-        let main: Main?
+        let dt: Int
+        let main: Main
         let weather: [Weather]?
         let clouds: Clouds?
         let wind: Wind?
@@ -62,9 +62,19 @@ extension CityWeatherForecastResponse.CityWeather {
     
     // MARK: - Main
     struct Main: Decodable, Hashable {
-        let temp, feelsLike, tempMin, tempMax: Double?
+        let temp, tempMin, tempMax: Double
+        let feelsLike: Double?
         let pressure, seaLevel, grndLevel, humidity: Int?
         let tempKf: Double?
+        
+        var asDictionary : [String: Any?] {
+          let mirror = Mirror(reflecting: self)
+          let dict = Dictionary(uniqueKeysWithValues: mirror.children.lazy.map({ (label:String?, value:Any) -> (String, Any)? in
+            guard let label = label else { return nil }
+            return (label, value)
+          }).compactMap { $0 })
+          return dict
+        }
         
         enum CodingKeys: String, CodingKey {
             case temp

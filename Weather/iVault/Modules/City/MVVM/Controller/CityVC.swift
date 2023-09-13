@@ -51,26 +51,28 @@ class CityVC: UIViewController {
         let collectionView = UICollectionView(frame: CGRect(x: 0, y: 0, width: 0, height: 0), collectionViewLayout: layout)
         layout.scrollDirection = .vertical
         collectionView.backgroundColor = .clear
+        collectionView.showsVerticalScrollIndicator = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
     
     private enum CityWeatherDataCollectionViewSection {
         case todayWeather
-        case condition
         case forecast
+        case condition
     }
     
     private enum CityWeatherDataCollectionViewItem: Hashable {
         case todayWeather(CityTVCModel)
-        case condition(CityWeatherForecastResponse.CityWeather.Main)
-        case forecast(CityWeatherForecastResponse.CityWeather)
+        case forecast(CityForecastWeatherDataCVCModel)
+        case condition(CityConditionWeatherDataCVCModel)
     }
     
     private typealias CityWeatherDataSourceReturnType = UICollectionViewDiffableDataSource<CityWeatherDataCollectionViewSection, CityWeatherDataCollectionViewItem>
     
     private lazy var cityWeatherDataSource = cityWeatherConfigureDataSource()
 
+    var temperatureScale: TemperatureScale = .celsius
     var delegate: CityDetailTopBarDelegate?
     var cityData: CityTVCModel?
 
@@ -79,11 +81,8 @@ class CityVC: UIViewController {
         // Do any additional setup after loading the view.
         setupUI()
         setupBinding()
-        
-//        startLoaderAnimation()
-//        viewModel.fireAPIGETWeatherForecast(for: CLLocation(latitude: 33.9731, longitude: -118.24))
-        
         cityWeatherUpdateSnapshot()
+        fireForecastAPI()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -155,12 +154,15 @@ private extension CityVC {
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: self.isBeingPresented ? 64 : 16),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
         collectionView.delegate = self
         collectionView.dataSource = cityWeatherDataSource
         collectionView.register(CityTodayWeatherDataCVC.self, forCellWithReuseIdentifier: ReusableIdentifierCVC.CityTodayWeatherDataCVC.rawValue)
+        collectionView.register(CityForecastWeatherDataCVC.self, forCellWithReuseIdentifier: ReusableIdentifierCVC.CityForecastWeatherDataCVC.rawValue)
+        collectionView.register(CityConditionWeatherDataCVC.self, forCellWithReuseIdentifier: ReusableIdentifierCVC.CityConditionWeatherDataCVC.rawValue)
+        collectionView.register(SectionHeaderCRV.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: ReusableIdentifierCRV.SectionHeaderCRV.rawValue)
     }
 }
 
@@ -178,9 +180,15 @@ private extension CityVC {
 
 extension CityVC {
     func setupBinding() {
-        viewModel.cityForecast.bind { [weak self] (value) in
+        viewModel.temperatureScale = temperatureScale
+        viewModel.cityForecast.bind { [weak self] (_) in
             guard let self = self else { return }
             self.cityWeatherUpdateSnapshot()
+        }
+        
+        viewModel.cityCondition.bind { [weak self] (_) in
+//            guard let self = self else { return }
+//            self.cityWeatherUpdateSnapshot()
         }
     }
 }
@@ -188,7 +196,6 @@ extension CityVC {
 private extension CityVC {
     private func cityWeatherConfigureDataSource() -> CityWeatherDataSourceReturnType {
         let dataSource = CityWeatherDataSourceReturnType(collectionView: collectionView) { (collectionView, indexPath, model) -> UICollectionViewCell? in
-            
             switch model {
             case .todayWeather(let model):
                 guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReusableIdentifierCVC.CityTodayWeatherDataCVC.rawValue, for: indexPath) as? CityTodayWeatherDataCVC else {
@@ -197,12 +204,36 @@ private extension CityVC {
                 let obj = CityTodayWeatherDataCVCModel(id: model.id, cityName: model.cityName, countryName: model.countryName, weatherDescription: model.weatherDescription, temperatureCurrent: model.temperatureCurrent, temperatureHigh: model.temperatureHigh, temperatureLow: model.temperatureLow)
                 cell.setup(for: obj)
                 return cell
-                return UICollectionViewCell()
-            case .condition(_):
-                return UICollectionViewCell()
-            case .forecast(_):
-                return UICollectionViewCell()
+            case .forecast(let model):
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReusableIdentifierCVC.CityForecastWeatherDataCVC.rawValue, for: indexPath) as? CityForecastWeatherDataCVC else {
+                    return UICollectionViewCell()
+                }
+                cell.setup(for: model)
+                return cell
+            case .condition(let model):
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReusableIdentifierCVC.CityConditionWeatherDataCVC.rawValue, for: indexPath) as? CityConditionWeatherDataCVC else {
+                    return UICollectionViewCell()
+                }
+                cell.setup(for: model)
+                return cell
             }
+        }
+        
+        dataSource.supplementaryViewProvider = { collectionView, kind, indexPath in
+            guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ReusableIdentifierCRV.SectionHeaderCRV.rawValue, for: indexPath) as? SectionHeaderCRV else {
+                return UICollectionReusableView()
+            }
+            switch indexPath.section {
+            case 0:
+                header.setup(for: SectionHeaderCRVModel.init(title: ""))
+            case 1:
+                header.setup(for: SectionHeaderCRVModel.init(title: "CityVC.CollectionView.Section.Header.Forecast.Title".localized))
+            case 2:
+                header.setup(for: SectionHeaderCRVModel.init(title: "CityVC.CollectionView.Section.Header.Condition.Title".localized))
+            default:
+                return UICollectionReusableView()
+            }
+            return header
         }
         return dataSource
     }
@@ -211,40 +242,55 @@ private extension CityVC {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             var snapshot = NSDiffableDataSourceSnapshot<CityWeatherDataCollectionViewSection, CityWeatherDataCollectionViewItem>()
-            snapshot.appendSections([.todayWeather])
+            snapshot.appendSections([.todayWeather, .forecast, .condition])
             if let cityData = self.cityData {
                 snapshot.appendItems([CityWeatherDataCollectionViewItem.todayWeather(cityData)], toSection: .todayWeather)
-                //            snapshot.appendItems(self.viewModel.cityForecast.value?.list ?? [], toSection: .todayWeather)
-                self.cityWeatherDataSource.apply(snapshot, animatingDifferences: false) {
-                    self.stopLoaderAnimation()
-                }
             }
+            if let cityForecastValue = self.viewModel.cityForecast.value {
+                var items = [CityWeatherDataCollectionViewItem]()
+                items = cityForecastValue.compactMap{ CityWeatherDataCollectionViewItem.forecast($0) }
+                snapshot.appendItems(items, toSection: .forecast)
+            }
+            if let cityConditionValue = self.viewModel.cityCondition.value {
+                var items = [CityWeatherDataCollectionViewItem]()
+                items = cityConditionValue.compactMap{ CityWeatherDataCollectionViewItem.condition($0) }
+                snapshot.appendItems(items, toSection: .condition)
+            }
+            self.cityWeatherDataSource.apply(snapshot, animatingDifferences: false)
         }
     }
 }
 
 extension CityVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if indexPath.item == 0 {
+        switch indexPath.section {
+        case 0:
             let width = (UIScreen.main.bounds.width - 16)
-            return CGSize(width: width, height: 180)
-        }
-        return CGSize.zero
-    }
-}
-
-extension CityVC: DisplayLoaderDelegate {
-    private func startLoaderAnimation() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.showLoadingView()
+            return CGSize(width: width, height: 140)
+        case 1:
+            let width = self.collectionView.bounds.width
+            return CGSize(width: width, height: 48)
+        default:
+            let width = (self.collectionView.bounds.width - 12)/2
+            return CGSize(width: width, height: 96)
         }
     }
     
-    private func stopLoaderAnimation() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.hideLoadingView()
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        switch section {
+        case 0:
+            return CGSize.zero
+        default:
+            return CGSize(width: self.collectionView.bounds.width, height: 56)
+        }
+    }
+}
+
+extension CityVC {
+    func fireForecastAPI() {
+        if let latitude = cityData?.location.coordinate.latitude,
+           let longitude = cityData?.location.coordinate.longitude {
+            viewModel.fireAPIGETWeatherForecast(for: CLLocation(latitude: latitude, longitude: longitude))
         }
     }
 }

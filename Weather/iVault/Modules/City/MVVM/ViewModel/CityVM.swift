@@ -8,10 +8,11 @@
 import Foundation
 import CoreLocation
 
-class CityVM: APIServiceProvider, TemperatureScaleConversionDataSource {
-    private(set) lazy var cityForecast = Bindable<CityWeatherForecastResponse>()
+class CityVM: APIServiceProvider, TemperatureScaleConversionDataSource, DateTimeDataSource {
+    private(set) lazy var cityForecast = Bindable<[CityForecastWeatherDataCVCModel]>()
+    private(set) lazy var cityCondition = Bindable<[CityConditionWeatherDataCVCModel]>()
     private(set) var error = Bindable<NetworkError>()
-    private(set) var temperatureScale: TemperatureScale = .celsius
+    var temperatureScale: TemperatureScale = .celsius
 }
 
 //handling weather API
@@ -23,7 +24,47 @@ extension CityVM {
             switch result {
             case .success(let forecast):
                 print(forecast)
-                self.cityForecast.value = forecast
+                DispatchQueue.global(qos: .userInteractive).async {
+                    if let cityWeatherList = forecast.list {
+                        var tempCityForecast = [CityForecastWeatherDataCVCModel]()
+                        var tempCityCondition = [CityConditionWeatherDataCVCModel]()
+                        for index in 0..<cityWeatherList.count {
+                            let temperatureHighInCelcius = self.convertKelvinToCelsius(cityWeatherList[index].main.tempMax)
+                            let temperatureLowInCelcius = self.convertKelvinToCelsius(cityWeatherList[index].main.tempMin)
+                            let icon = BaseUrl.icon.rawValue + EndPoints.icon.rawValue + (WeatherDescription(rawValue: cityWeatherList[index].weather?.first?.description ?? "")?.dayIcon ?? "")
+                            let cityForecast = CityForecastWeatherDataCVCModel(id: cityWeatherList[index].dt,
+                                                                               day: index == 0 ? "CityVM.Day.Today.Title".localized : self.toWeekday(from: cityWeatherList[index].dt + (index * 24 * 3600)),
+                                                                          icon: icon,
+                                                                          temperatureHigh: self.temperatureScale == .celsius ? temperatureHighInCelcius : self.convertCelsiusToFahrenheit(temperatureHighInCelcius),
+                                                                          temperatureLow: self.temperatureScale == .celsius ? temperatureLowInCelcius : self.convertCelsiusToFahrenheit(temperatureLowInCelcius))
+                            tempCityForecast.append(cityForecast)
+                                                        
+                            if index == 0 {
+                                let condtionDict: [String: Any?] = cityWeatherList.first?.main.asDictionary ?? [:]
+                                for (key, value) in condtionDict {
+                                    if let condition = WeatherCondition(rawValue: key) {
+                                        if condition == .feelsLike {
+                                            if let value = value as? Double {
+                                                let feelsLikeInCelcius = self.convertKelvinToCelsius(value)
+                                                let temperatureScaleValue: String = "\(Int(self.temperatureScale == .celsius ? feelsLikeInCelcius : self.convertCelsiusToFahrenheit(feelsLikeInCelcius)))"
+                                                tempCityCondition.append(CityConditionWeatherDataCVCModel(title: condition.title, message: temperatureScaleValue))
+                                            }
+                                        } else {
+                                            tempCityCondition.append(CityConditionWeatherDataCVCModel(title: condition.title, message: "\(String(describing: value ?? ""))"))
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            if index == cityWeatherList.count - 1 {
+                                self.cityCondition.value = tempCityCondition
+                                tempCityCondition = []
+                                self.cityForecast.value = tempCityForecast
+                                tempCityForecast = []
+                            }
+                        }
+                    }
+                }
             case .failure(let error):
                 self.error.value = error
             }

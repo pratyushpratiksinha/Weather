@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreLocation
 
 struct CityTVCModel: Hashable {
     let id: Int
@@ -15,6 +16,7 @@ struct CityTVCModel: Hashable {
     var temperatureCurrent: Double
     var temperatureHigh: Double
     var temperatureLow: Double
+    var location: CLLocation
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)

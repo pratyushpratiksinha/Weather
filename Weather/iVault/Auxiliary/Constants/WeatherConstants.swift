@@ -64,3 +64,26 @@ enum WeatherDescription: String {
         }
     }
 }
+
+enum WeatherCondition: String {
+    case feelsLike = "feelsLike"
+    case pressure = "pressure"
+    case seaLevel = "seaLevel"
+    case grndLevel = "grndLevel"
+    case humidity = "humidity"
+    
+    var title: String {
+        switch self {
+        case .feelsLike:
+            return "WeatherCondition.Title.FeelsLike".localized
+        case .pressure:
+            return "WeatherCondition.Title.Pressure".localized
+        case .seaLevel:
+            return "WeatherCondition.Title.SeaLevel".localized
+        case .grndLevel:
+            return "WeatherCondition.Title.GroundLevel".localized
+        case .humidity:
+            return "WeatherCondition.Title.Humidity".localized
+        }
+    }
+}

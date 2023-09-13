@@ -42,3 +42,15 @@
 "CityVC.TopBar.AddButton.Title" = "Add";
 "CityVC.Popover.CelsiusItem.Title" = "Celsius        °C";
 "CityVC.Popover.FahrenheitItem.Title" = "Fahrenheit  °F";
+"CityVC.CollectionView.Section.Header.Forecast.Title" = "7 days forecast";
+"CityVC.CollectionView.Section.Header.Condition.Title" = "Today's condition";
+
+//MARK: - CityVM
+"CityVM.Day.Today.Title" = "Today";
+
+//MARK: - WeatherCondition
+"WeatherCondition.Title.FeelsLike" = "Feels like";
+"WeatherCondition.Title.Pressure" = "Pressure";
+"WeatherCondition.Title.SeaLevel" = "Sea level";
+"WeatherCondition.Title.GroundLevel" = "Ground level";
+"WeatherCondition.Title.Humidity" = "Humidity";

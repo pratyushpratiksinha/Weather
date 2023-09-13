@@ -52,10 +52,11 @@ extension CityListVM {
                     let element = CityTVCModel(id: city.id,
                                                cityName: city.name,
                                                countryName: city.sys.country,
-                                               weatherDescription: city.weather?[0].description ?? "",
+                                               weatherDescription: city.weather?.first?.description ?? "",
                                                temperatureCurrent: self.temperatureScale == .celsius ? temperatureCurrentInCelcius : self.convertCelsiusToFahrenheit(temperatureCurrentInCelcius),
                                                temperatureHigh: self.temperatureScale == .celsius ? temperatureHighInCelcius : self.convertCelsiusToFahrenheit(temperatureHighInCelcius),
-                                               temperatureLow: self.temperatureScale == .celsius ? temperatureLowInCelcius : self.convertCelsiusToFahrenheit(temperatureLowInCelcius))
+                                               temperatureLow: self.temperatureScale == .celsius ? temperatureLowInCelcius : self.convertCelsiusToFahrenheit(temperatureLowInCelcius),
+                                               location: CLLocation(latitude: city.coord.lat, longitude: city.coord.lon))
                     if self.cityList.value == nil {
                         self.cityList.value = [element]
                     } else {

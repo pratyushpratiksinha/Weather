@@ -31,7 +31,6 @@ class CityTodayWeatherDataCVC: UICollectionViewCell {
     private let customView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
-        view.layer.cornerRadius = 10.0
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -79,12 +78,13 @@ class CityTodayWeatherDataCVC: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        contentView.backgroundColor = .clear
         contentView.addSubview(customView)
         NSLayoutConstraint.activate([
             customView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
             customView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
-            customView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
-            customView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8)
+            customView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            customView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
         
         customView.addSubview(cityNameLabel)
@@ -118,8 +118,6 @@ class CityTodayWeatherDataCVC: UICollectionViewCell {
             temperatureHighLowLabel.trailingAnchor.constraint(equalTo: customView.trailingAnchor, constant: -8),
             temperatureHighLowLabel.heightAnchor.constraint(equalToConstant: 20)
         ])
-        
-        self.contentView.backgroundColor = .clear
     }
     
     required init?(coder: NSCoder) {
