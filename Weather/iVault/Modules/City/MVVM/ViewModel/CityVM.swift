@@ -18,10 +18,12 @@ class CityVM: APIServiceProvider, TemperatureScaleConversionDataSource {
 extension CityVM {
     
     final func fireAPIGETWeatherForecast(for location: CLLocation) {
-        getWeatherForecast(for: location){ (result) in
+        getWeatherForecast(for: location){ [weak self] (result) in
+            guard let self = self else { return }
             switch result {
             case .success(let forecast):
                 print(forecast)
+                self.cityForecast.value = forecast
             case .failure(let error):
                 self.error.value = error
             }

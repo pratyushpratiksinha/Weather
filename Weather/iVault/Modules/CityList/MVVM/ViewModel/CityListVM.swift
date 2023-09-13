@@ -40,12 +40,12 @@ extension CityListVM {
 extension CityListVM {
     
     final func fireAPIGETWeather(for location: CLLocation) {
-        getWeather(for: location){ (result) in
+        getWeather(for: location){ [weak self] (result) in
+            guard let self = self else { return }
             switch result {
             case .success(let city):
                 print(city)
-                DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-                    guard let self = self else { return }
+                DispatchQueue.global(qos: .userInteractive).async {
                     let temperatureCurrentInCelcius = self.convertKelvinToCelsius(city.main.temp)
                     let temperatureHighInCelcius = self.convertKelvinToCelsius(city.main.tempMax)
                     let temperatureLowInCelcius = self.convertKelvinToCelsius(city.main.tempMin)

@@ -11,7 +11,7 @@ import Foundation
 struct CityWeatherForecastResponse: Decodable {
     let cod: String?
     let message, cnt: Int?
-    let list: [List]?
+    let list: [CityWeather]?
     let city: City?
 }
 
@@ -26,7 +26,7 @@ extension CityWeatherForecastResponse {
     }
     
     // MARK: - List
-    struct List: Decodable {
+    struct CityWeather: Decodable, Hashable {
         let dt: Int?
         let main: Main?
         let weather: [Weather]?
@@ -40,6 +40,10 @@ extension CityWeatherForecastResponse {
             case dt, main, weather, clouds, wind, visibility, pop, sys
             case dtTxt = "dt_txt"
         }
+        
+        static func == (lhs: CityWeather, rhs: CityWeather) -> Bool {
+            lhs.dt == rhs.dt && lhs.main == rhs.main && lhs.weather == rhs.weather && lhs.clouds == rhs.clouds && lhs.wind == rhs.wind && lhs.visibility == rhs.visibility && lhs.pop == rhs.pop && lhs.sys == rhs.sys && lhs.dtTxt == rhs.dtTxt
+        }
     }
 }
 
@@ -50,14 +54,14 @@ extension CityWeatherForecastResponse.City {
     }
 }
 
-extension CityWeatherForecastResponse.List {
+extension CityWeatherForecastResponse.CityWeather {
     // MARK: - Clouds
-    struct Clouds: Decodable {
+    struct Clouds: Decodable, Hashable {
         let all: Int?
     }
     
     // MARK: - Main
-    struct Main: Decodable {
+    struct Main: Decodable, Hashable {
         let temp, feelsLike, tempMin, tempMax: Double?
         let pressure, seaLevel, grndLevel, humidity: Int?
         let tempKf: Double?
@@ -76,18 +80,18 @@ extension CityWeatherForecastResponse.List {
     }
     
     // MARK: - Sys
-    struct Sys: Decodable {
+    struct Sys: Decodable, Hashable {
         let pod: String?
     }
     
     // MARK: - Weather
-    struct Weather: Decodable {
+    struct Weather: Decodable, Hashable {
         let id: Int?
         let main, description, icon: String?
     }
     
     // MARK: - Wind
-    struct Wind: Decodable {
+    struct Wind: Decodable, Hashable {
         let speed: Double?
         let deg: Int?
         let gust: Double?

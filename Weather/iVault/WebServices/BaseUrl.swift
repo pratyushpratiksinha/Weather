@@ -11,6 +11,7 @@ import Foundation
 public enum BaseUrl : String {
     case base
     case geo
+    case icon
     
     public var rawValue: String {
         switch self {
@@ -18,8 +19,11 @@ public enum BaseUrl : String {
             let baseURL: String = "https://" + (try! Configuration.value(for: .baseURL))
             return baseURL
         case .geo:
-            let baseURL: String = "https://" + (try! Configuration.value(for: .geoURL))
-            return baseURL
+            let geoURL: String = "https://" + (try! Configuration.value(for: .geoURL))
+            return geoURL
+        case .icon:
+            let iconURL: String = "https://" + (try! Configuration.value(for: .iconURL)) + "/"
+            return iconURL
         }
     }
 }

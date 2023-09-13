@@ -12,4 +12,5 @@ public enum EndPoints : String {
     case weather = "/weather"
     case forecast = "/forecast"
     case zip = "/zip"
+    case icon = "/img/wn/"
 }

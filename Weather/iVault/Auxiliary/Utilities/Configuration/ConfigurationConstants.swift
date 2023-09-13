@@ -11,4 +11,5 @@ enum ConfigurationKey: String {
     case baseURL = "API_BASE_URL"
     case appId = "API_KEY"
     case geoURL = "API_GEO_URL"
+    case iconURL = "API_ICON_URL"
 }

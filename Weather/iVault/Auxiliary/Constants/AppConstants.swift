@@ -12,5 +12,5 @@ enum ReusableIdentifierTVC: String {
 }
 
 enum ReusableIdentifierCVC: String {
-    case CityPrimaryWeatherDataCVC = "CityPrimaryWeatherDataCVC"
+    case CityTodayWeatherDataCVC = "CityTodayWeatherDataCVC"
 }

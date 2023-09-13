@@ -11,6 +11,7 @@
 //MARK: Server URL
 API_BASE_URL = api.openweathermap.org/data/2.5
 API_GEO_URL = api.openweathermap.org/geo/1.0
+API_ICON_URL = openweathermap.org
 
 //MARK: API Key
 API_KEY = ac08ac7868952ee898d6319fbf618fff
