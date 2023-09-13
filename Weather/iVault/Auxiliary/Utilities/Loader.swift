@@ -42,7 +42,7 @@ extension DisplayLoaderDelegate where Self: UIViewController {
 }
 
 final class LoadingView: UIView {
-    private let activityIndicatorView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.large)
+    private let activityIndicatorView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.medium)
     
     override func layoutSubviews() {
         super.layoutSubviews()

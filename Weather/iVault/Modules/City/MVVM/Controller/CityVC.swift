@@ -61,7 +61,13 @@ class CityVC: UIViewController {
         case forecast
     }
     
-    private typealias CityWeatherDataSourceReturnType = UICollectionViewDiffableDataSource<CityWeatherDataCollectionViewSection, CityWeatherForecastResponse.CityWeather>
+    private enum CityWeatherDataCollectionViewItem: Hashable {
+        case todayWeather(CityTVCModel)
+        case condition(CityWeatherForecastResponse.CityWeather.Main)
+        case forecast(CityWeatherForecastResponse.CityWeather)
+    }
+    
+    private typealias CityWeatherDataSourceReturnType = UICollectionViewDiffableDataSource<CityWeatherDataCollectionViewSection, CityWeatherDataCollectionViewItem>
     
     private lazy var cityWeatherDataSource = cityWeatherConfigureDataSource()
 
@@ -74,7 +80,10 @@ class CityVC: UIViewController {
         setupUI()
         setupBinding()
         
-        viewModel.fireAPIGETWeatherForecast(for: CLLocation(latitude: 33.9731, longitude: -118.24))
+//        startLoaderAnimation()
+//        viewModel.fireAPIGETWeatherForecast(for: CLLocation(latitude: 33.9731, longitude: -118.24))
+        
+        cityWeatherUpdateSnapshot()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -106,7 +115,8 @@ private extension CityVC {
         let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         navigationController?.navigationBar.titleTextAttributes = textAttributes
         navigationController?.navigationBar.largeTitleTextAttributes = textAttributes
-        navigationController?.navigationBar.barTintColor = .black.withAlphaComponent(0)
+        self.navigationController?.navigationBar.isTranslucent = true
+        self.navigationController?.navigationBar.backgroundColor = .clear
         navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
@@ -177,17 +187,22 @@ extension CityVC {
 
 private extension CityVC {
     private func cityWeatherConfigureDataSource() -> CityWeatherDataSourceReturnType {
-        let dataSource = CityWeatherDataSourceReturnType(collectionView: collectionView) { [weak self] (collectionView, indexPath, model) -> UICollectionViewCell? in
-            guard let self = self,
-                  let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReusableIdentifierCVC.CityTodayWeatherDataCVC.rawValue, for: indexPath) as? CityTodayWeatherDataCVC else {
-                return UICollectionViewCell()
-            }
-            if let cityData = self.cityData {
-                let obj = CityTodayWeatherDataCVCModel(id: cityData.id, cityName: cityData.cityName, countryName: cityData.countryName, weatherDescription: cityData.weatherDescription, temperatureCurrent: cityData.temperatureCurrent, temperatureHigh: cityData.temperatureHigh, temperatureLow: cityData.temperatureLow)
+        let dataSource = CityWeatherDataSourceReturnType(collectionView: collectionView) { (collectionView, indexPath, model) -> UICollectionViewCell? in
+            
+            switch model {
+            case .todayWeather(let model):
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReusableIdentifierCVC.CityTodayWeatherDataCVC.rawValue, for: indexPath) as? CityTodayWeatherDataCVC else {
+                    return UICollectionViewCell()
+                }
+                let obj = CityTodayWeatherDataCVCModel(id: model.id, cityName: model.cityName, countryName: model.countryName, weatherDescription: model.weatherDescription, temperatureCurrent: model.temperatureCurrent, temperatureHigh: model.temperatureHigh, temperatureLow: model.temperatureLow)
                 cell.setup(for: obj)
                 return cell
+                return UICollectionViewCell()
+            case .condition(_):
+                return UICollectionViewCell()
+            case .forecast(_):
+                return UICollectionViewCell()
             }
-            return UICollectionViewCell()
         }
         return dataSource
     }
@@ -195,11 +210,14 @@ private extension CityVC {
     func cityWeatherUpdateSnapshot(animatingChange: Bool = false) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            var snapshot = NSDiffableDataSourceSnapshot<CityWeatherDataCollectionViewSection, CityWeatherForecastResponse.CityWeather>()
+            var snapshot = NSDiffableDataSourceSnapshot<CityWeatherDataCollectionViewSection, CityWeatherDataCollectionViewItem>()
             snapshot.appendSections([.todayWeather])
-            snapshot.appendItems(self.viewModel.cityForecast.value?.list ?? [], toSection: .todayWeather)
-            self.cityWeatherDataSource.apply(snapshot, animatingDifferences: false) {
-//                self.stopLoaderAnimation()
+            if let cityData = self.cityData {
+                snapshot.appendItems([CityWeatherDataCollectionViewItem.todayWeather(cityData)], toSection: .todayWeather)
+                //            snapshot.appendItems(self.viewModel.cityForecast.value?.list ?? [], toSection: .todayWeather)
+                self.cityWeatherDataSource.apply(snapshot, animatingDifferences: false) {
+                    self.stopLoaderAnimation()
+                }
             }
         }
     }
@@ -207,7 +225,26 @@ private extension CityVC {
 
 extension CityVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (UIScreen.main.bounds.width - 16)
-        return CGSize(width: width, height: 180)
+        if indexPath.item == 0 {
+            let width = (UIScreen.main.bounds.width - 16)
+            return CGSize(width: width, height: 180)
+        }
+        return CGSize.zero
+    }
+}
+
+extension CityVC: DisplayLoaderDelegate {
+    private func startLoaderAnimation() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.showLoadingView()
+        }
+    }
+    
+    private func stopLoaderAnimation() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.hideLoadingView()
+        }
     }
 }

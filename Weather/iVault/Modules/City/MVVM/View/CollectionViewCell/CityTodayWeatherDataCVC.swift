@@ -30,7 +30,7 @@ class CityTodayWeatherDataCVC: UICollectionViewCell {
     
     private let customView: UIView = {
         let view = UIView()
-        view.backgroundColor = .gray.withAlphaComponent(0.4)
+        view.backgroundColor = .clear
         view.layer.cornerRadius = 10.0
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -50,7 +50,7 @@ class CityTodayWeatherDataCVC: UICollectionViewCell {
         let lbl = UILabel()
         lbl.textColor = .white
         lbl.numberOfLines = 1
-        lbl.font = UIFont.systemFont(ofSize: 32, weight: .heavy)
+        lbl.font = UIFont.systemFont(ofSize: 40, weight: .heavy)
         lbl.textAlignment = .center
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
@@ -97,7 +97,7 @@ class CityTodayWeatherDataCVC: UICollectionViewCell {
         
         customView.addSubview(temperatureCurrentLabel)
         NSLayoutConstraint.activate([
-            temperatureCurrentLabel.topAnchor.constraint(equalTo: cityNameLabel.bottomAnchor, constant: 8),
+            temperatureCurrentLabel.topAnchor.constraint(equalTo: cityNameLabel.bottomAnchor),
             temperatureCurrentLabel.leadingAnchor.constraint(equalTo: customView.leadingAnchor, constant: 8),
             temperatureCurrentLabel.trailingAnchor.constraint(equalTo: customView.trailingAnchor, constant: -8),
             temperatureCurrentLabel.heightAnchor.constraint(equalToConstant: 48)
@@ -105,7 +105,7 @@ class CityTodayWeatherDataCVC: UICollectionViewCell {
         
         customView.addSubview(weatherDescriptionLabel)
         NSLayoutConstraint.activate([
-            weatherDescriptionLabel.topAnchor.constraint(greaterThanOrEqualTo: temperatureCurrentLabel.bottomAnchor, constant: 16),
+            weatherDescriptionLabel.topAnchor.constraint(greaterThanOrEqualTo: temperatureCurrentLabel.bottomAnchor),
             weatherDescriptionLabel.leadingAnchor.constraint(equalTo: customView.leadingAnchor, constant: 8),
             weatherDescriptionLabel.trailingAnchor.constraint(equalTo: customView.trailingAnchor, constant: -8),
             weatherDescriptionLabel.heightAnchor.constraint(equalToConstant: 20)
@@ -113,7 +113,7 @@ class CityTodayWeatherDataCVC: UICollectionViewCell {
         
         customView.addSubview(temperatureHighLowLabel)
         NSLayoutConstraint.activate([
-            temperatureHighLowLabel.topAnchor.constraint(greaterThanOrEqualTo: weatherDescriptionLabel.bottomAnchor, constant: 16),
+            temperatureHighLowLabel.topAnchor.constraint(greaterThanOrEqualTo: weatherDescriptionLabel.bottomAnchor),
             temperatureHighLowLabel.leadingAnchor.constraint(equalTo: customView.leadingAnchor, constant: 8),
             temperatureHighLowLabel.trailingAnchor.constraint(equalTo: customView.trailingAnchor, constant: -8),
             temperatureHighLowLabel.heightAnchor.constraint(equalToConstant: 20)
