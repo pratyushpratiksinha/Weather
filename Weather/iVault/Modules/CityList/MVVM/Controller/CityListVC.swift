@@ -294,7 +294,7 @@ extension CityListVC: LocationDelegate, CLLocationManagerDelegate {
                 if isEnabled {
                     self.locationManager.startUpdatingLocation()
                 } else {
-                    #warning("show alert")
+                    self.showAlertWithGoToSettingsAction(title: "CityListVC.Alert.LocationPermission.Title".localized, message: "CityListVC.Alert.LocationPermission.Message".localized)
                 }
             }
         }
@@ -302,12 +302,10 @@ extension CityListVC: LocationDelegate, CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {
-        case .notDetermined, .restricted, .denied:
-            #warning("show alert")
         case .authorizedAlways, .authorizedWhenInUse:
             locationManager.startUpdatingLocation()
-        @unknown default:
-                break
+        default:
+            break
         }
     }
 
@@ -329,6 +327,13 @@ extension CityListVC: DisplayAlertDelegate {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.displayAlert(title: title, message: message)
+        }
+    }
+    
+    private func showAlertWithGoToSettingsAction(title: String, message: String) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.displayAlertWithGoToSettingsAction(title: title, message: message)
         }
     }
 }

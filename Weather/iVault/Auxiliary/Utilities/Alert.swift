@@ -12,6 +12,7 @@ typealias AlertAction = (UIAlertAction) -> Void
 protocol DisplayAlertDelegate {
     func displayAlert(title: String, message: String)
     func displayAlertWithAction(title: String?, message: String?, action: AlertAction?)
+    func displayAlertWithGoToSettingsAction(title: String?, message: String?)
 }
 
 extension DisplayAlertDelegate where Self: UIViewController {
@@ -26,6 +27,16 @@ extension DisplayAlertDelegate where Self: UIViewController {
         displayAlert(title: title,
                      message: message,
                      actions: [UIAlertAction(title: "Alert.Ok.title".localized, style: .default, handler: action),
+                               UIAlertAction(title: "Alert.Cancel.title".localized, style: .cancel, handler: nil)])
+    }
+    
+    func displayAlertWithGoToSettingsAction(title: String?, message: String?) {
+        let goToSettingsAction = UIAlertAction(title: "Alert.Settings.title".localized, style: .default, handler: {(cAlertAction) in
+            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+        })
+        displayAlert(title: title,
+                     message: message,
+                     actions: [goToSettingsAction,
                                UIAlertAction(title: "Alert.Cancel.title".localized, style: .cancel, handler: nil)])
     }
     

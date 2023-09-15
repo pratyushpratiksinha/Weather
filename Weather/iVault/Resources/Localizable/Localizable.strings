@@ -22,6 +22,7 @@
 //MARK: - Alert
 "Alert.Ok.title" = "Ok";
 "Alert.Cancel.title" = "Cancel";
+"Alert.Settings.title" = "Settings";
 
 //MARK: - NilData
 "NilDataView.Label.Text" = "No data available";
@@ -32,6 +33,8 @@
 "CityListVC.TableView.DeleteSwipeAction.Title" = "Delete";
 "CityListVC.Alert.ListLimit.Title" = "Alert";
 "CityListVC.Alert.ListLimit.Message" = "You can only add upto 10 cities in the list.";
+"CityListVC.Alert.LocationPermission.Title" = "Location Permission Required";
+"CityListVC.Alert.LocationPermission.Message" = "Please enable location permissions in settings.";
 
 //MARK: - CityListVM
 "CityListVM.Alert.CityAlreadyAvailable.Title" = "Alert";

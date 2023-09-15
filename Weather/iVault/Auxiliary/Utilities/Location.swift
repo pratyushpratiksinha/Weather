@@ -18,12 +18,12 @@ extension LocationDelegate where Self: UIViewController {
         
         if CLLocationManager.locationServicesEnabled() {
             switch manager.authorizationStatus {
-            case .notDetermined, .restricted, .denied:
+            case .denied:
                 onCompletion(false)
             case .authorizedAlways, .authorizedWhenInUse:
                 onCompletion(true)
-            @unknown default:
-                    break
+            default:
+                break
             }
         } else {
             onCompletion(false)
