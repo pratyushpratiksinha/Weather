@@ -13,6 +13,7 @@ struct CityTVCModel: Hashable {
     let cityName: String
     let countryName: String
     let weatherDescription: String
+    let backgroundImage: String?
     var temperatureCurrent: Double
     var temperatureHigh: Double
     var temperatureLow: Double
@@ -24,7 +25,7 @@ struct CityTVCModel: Hashable {
     }
     
     static func == (lhs: CityTVCModel, rhs: CityTVCModel) -> Bool {
-        lhs.id == rhs.id && lhs.cityName == rhs.cityName && lhs.countryName == rhs.countryName && lhs.weatherDescription == rhs.weatherDescription && lhs.temperatureCurrent == rhs.temperatureCurrent && lhs.temperatureHigh == rhs.temperatureHigh && lhs.temperatureLow == rhs.temperatureLow
+        lhs.id == rhs.id && lhs.cityName == rhs.cityName && lhs.countryName == rhs.countryName && lhs.weatherDescription == rhs.weatherDescription && lhs.backgroundImage == rhs.backgroundImage && lhs.temperatureCurrent == rhs.temperatureCurrent && lhs.temperatureHigh == rhs.temperatureHigh && lhs.temperatureLow == rhs.temperatureLow
     }
 }
 
@@ -32,10 +33,19 @@ class CityTVC: UITableViewCell {
     
     private let customView: UIView = {
         let view = UIView()
-        view.backgroundColor = .gray
+        view.backgroundColor = UIColor("#89CFF0")
         view.layer.cornerRadius = 10.0
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
+    }()
+    
+    private let backgroundImageView : UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.layer.cornerRadius = 10.0
+        imageView.clipsToBounds = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
     }()
     
     private let cityNameLabel : UILabel = {
@@ -99,6 +109,14 @@ class CityTVC: UITableViewCell {
             customView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
         ])
         
+        customView.addSubview(backgroundImageView)
+        NSLayoutConstraint.activate([
+            backgroundImageView.topAnchor.constraint(equalTo: customView.topAnchor),
+            backgroundImageView.bottomAnchor.constraint(equalTo: customView.bottomAnchor),
+            backgroundImageView.leadingAnchor.constraint(equalTo: customView.leadingAnchor),
+            backgroundImageView.trailingAnchor.constraint(equalTo: customView.trailingAnchor)
+        ])
+        
         customView.addSubview(cityNameLabel)
         NSLayoutConstraint.activate([
             cityNameLabel.topAnchor.constraint(equalTo: customView.topAnchor, constant: 8),
@@ -149,5 +167,8 @@ class CityTVC: UITableViewCell {
         self.weatherDescriptionLabel.text = model.weatherDescription.capitalized
         self.temperatureCurrentLabel.text = "\(Int(model.temperatureCurrent))°"
         self.temperatureHighLowLabel.text = "H:\(Int(model.temperatureHigh))°  L:\(Int(model.temperatureLow))°"
+        if let backgroundImage = model.backgroundImage {
+            self.backgroundImageView.image = UIImage(named: backgroundImage)
+        }
     }
 }

@@ -128,6 +128,6 @@ class CityTodayWeatherDataCVC: UICollectionViewCell {
         self.cityNameLabel.text = model.cityName
         self.weatherDescriptionLabel.text = model.weatherDescription.capitalized
         self.temperatureCurrentLabel.text = "\(Int(model.temperatureCurrent))°"
-        self.temperatureHighLowLabel.text = "H:\(Int(model.temperatureHigh))°  L:\(Int(model.temperatureLow))°"
+        self.temperatureHighLowLabel.text = "High:\(Int(model.temperatureHigh))°  Low:\(Int(model.temperatureLow))°"
     }
 }

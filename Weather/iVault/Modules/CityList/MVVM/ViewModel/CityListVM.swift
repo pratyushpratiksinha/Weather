@@ -49,10 +49,19 @@ extension CityListVM {
                     let temperatureCurrentInCelcius = self.convertKelvinToCelsius(city.main.temp)
                     let temperatureHighInCelcius = self.convertKelvinToCelsius(city.main.tempMax)
                     let temperatureLowInCelcius = self.convertKelvinToCelsius(city.main.tempMin)
+                    var backgroundImage: String?
+                    
+                    if (city.dt ?? 0) > (city.sys.sunrise ?? 0) && (city.dt ?? 0) < (city.sys.sunset ?? 0) {
+                        backgroundImage = WeatherDescription(rawValue: city.weather?.first?.description ?? "")?.dayImage
+                    } else {
+                        backgroundImage = WeatherDescription(rawValue: city.weather?.first?.description ?? "")?.nightImage
+                    }
+                    
                     let element = CityTVCModel(id: city.id,
                                                cityName: city.name,
                                                countryName: city.sys.country,
                                                weatherDescription: city.weather?.first?.description ?? "",
+                                               backgroundImage: backgroundImage,
                                                temperatureCurrent: self.temperatureScale == .celsius ? temperatureCurrentInCelcius : self.convertCelsiusToFahrenheit(temperatureCurrentInCelcius),
                                                temperatureHigh: self.temperatureScale == .celsius ? temperatureHighInCelcius : self.convertCelsiusToFahrenheit(temperatureHighInCelcius),
                                                temperatureLow: self.temperatureScale == .celsius ? temperatureLowInCelcius : self.convertCelsiusToFahrenheit(temperatureLowInCelcius),

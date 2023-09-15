@@ -27,7 +27,7 @@ class CityForecastWeatherDataCVC: UICollectionViewCell {
     
     private let customView: UIView = {
         let view = UIView()
-        view.backgroundColor = .gray.withAlphaComponent(0.4)
+        view.backgroundColor = .black.withAlphaComponent(0.5)
         view.layer.cornerRadius = 10.0
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -46,6 +46,7 @@ class CityForecastWeatherDataCVC: UICollectionViewCell {
     private let iconImageView : UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()

@@ -64,6 +64,7 @@ class CityListVC: UIViewController {
         setupBinding()
         setupPopoverItems()
         cityListUpdateSnapshot()
+        updateFirstItemWRTLocation()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -137,6 +138,8 @@ private extension CityListVC {
                     self.stopLoaderAnimation()
                     
                     let cityVC = CityVC()
+                    cityVC.temperatureScale = self.viewModel.temperatureScale
+                    cityVC.cityData = value?.last
                     cityVC.delegate = self
                     if let sheet = cityVC.sheetPresentationController {
                         sheet.detents = [.large()]
@@ -155,6 +158,7 @@ private extension CityListVC {
         
         viewModel.alert.bind { [weak self] (titleMessage) in
             guard let self = self else { return }
+            self.stopLoaderAnimation()
             if let alertTitleMessage = titleMessage {
                 self.showAlert(title: alertTitleMessage.0, message: alertTitleMessage.1)
             }
@@ -180,8 +184,9 @@ extension CityListVC: UITableViewDelegate {
         if let value = viewModel.cityList.value {
             if indexPath.row <= value.count - 1 {
                 let cityVC = CityVC()
-                cityVC.navigationItemTitle = viewModel.cityList.value?[indexPath.row].cityName
-                self.navigationController?.pushViewController(cityVC, animated: true)
+                cityVC.temperatureScale = viewModel.temperatureScale
+                cityVC.cityData = value[indexPath.row]
+                self.navigationController?.pushViewController(cityVC, animated: false)
             }
         }
     }
@@ -230,9 +235,13 @@ private extension CityListVC {
 extension CityListVC: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
-        if let text = searchBar.text {
-            startLoaderAnimation()
-            viewModel.fireAPIGETGeo(from: text)
+        if (viewModel.cityList.value?.count ?? 0) <= 10 {
+            if let text = searchBar.text {
+                startLoaderAnimation()
+                viewModel.fireAPIGETGeo(from: text)
+            }
+        } else {
+            showAlert(title: "CityListVC.Alert.ListLimit.Title".localized, message: "CityListVC.Alert.ListLimit.Message".localized)
         }
     }
 }
@@ -243,25 +252,29 @@ extension CityListVC: HandleNilDataDelegate {
     }
 }
 
-//extension CityListVC: LocationDelegate, CLLocationManagerDelegate {
-//
-//    private func isLocationPermissionEnabled() -> Bool {
-//        hasLocationPermission()
-//    }
-//
-//    private func updateFirstItemWRTLocation() {
+extension CityListVC: LocationDelegate, CLLocationManagerDelegate {
+
+    private func isLocationPermissionEnabled() -> Bool {
+        hasLocationPermission()
+    }
+
+    private func updateFirstItemWRTLocation() {
 //        if isLocationPermissionEnabled() {
-//            locationManager.delegate = self
+            locationManager.delegate = self
 //            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-//            locationManager.startUpdatingLocation()
+            locationManager.requestLocation()
 //        }
-//    }
-//
-//    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-//        guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
-//        print("locations = \(locValue.latitude) \(locValue.longitude)")
-//    }
-//}
+    }
+
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
+        print("locations = \(locValue.latitude) \(locValue.longitude)")
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print(error)
+    }
+}
 
 extension CityListVC: DisplayAlertDelegate {
     private func showAlert(title: String, message: String) {
@@ -271,7 +284,6 @@ extension CityListVC: DisplayAlertDelegate {
         }
     }
 }
-
 
 extension CityListVC: DisplayLoaderDelegate {
     private func startLoaderAnimation() {

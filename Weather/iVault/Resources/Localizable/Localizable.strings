@@ -30,6 +30,8 @@
 "CityListVC.NavigationItem.Title" = "Weather";
 "CityListVC.SearchBar.Placeholder" = "Enter zipcode";
 "CityListVC.TableView.DeleteSwipeAction.Title" = "Delete";
+"CityListVC.Alert.ListLimit.Title" = "Alert";
+"CityListVC.Alert.ListLimit.Message" = "You can only add upto 10 cities in the list.";
 
 //MARK: - CityListVM
 "CityListVM.Alert.CityAlreadyAvailable.Title" = "Alert";

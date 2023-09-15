@@ -12,7 +12,13 @@ class CityVM: APIServiceProvider, TemperatureScaleConversionDataSource, DateTime
     private(set) lazy var cityForecast = Bindable<[CityForecastWeatherDataCVCModel]>()
     private(set) lazy var cityCondition = Bindable<[CityConditionWeatherDataCVCModel]>()
     private(set) var error = Bindable<NetworkError>()
-    var temperatureScale: TemperatureScale = .celsius
+    private(set) var temperatureScale: TemperatureScale = .celsius
+}
+
+extension CityVM {
+    func setTemperatureScale(_ scale: TemperatureScale) {
+        self.temperatureScale = scale
+    }
 }
 
 //handling weather API
@@ -31,14 +37,14 @@ extension CityVM {
                         for index in 0..<cityWeatherList.count {
                             let temperatureHighInCelcius = self.convertKelvinToCelsius(cityWeatherList[index].main.tempMax)
                             let temperatureLowInCelcius = self.convertKelvinToCelsius(cityWeatherList[index].main.tempMin)
-                            let icon = BaseUrl.icon.rawValue + EndPoints.icon.rawValue + (WeatherDescription(rawValue: cityWeatherList[index].weather?.first?.description ?? "")?.dayIcon ?? "")
+                            let icon = BaseUrl.icon.rawValue + EndPoints.icon.rawValue + (cityWeatherList[index].weather?.first?.icon ?? "") + ImageType.png.rawValue
                             let cityForecast = CityForecastWeatherDataCVCModel(id: cityWeatherList[index].dt,
-                                                                               day: index == 0 ? "CityVM.Day.Today.Title".localized : self.toWeekday(from: cityWeatherList[index].dt + (index * 24 * 3600)),
-                                                                          icon: icon,
-                                                                          temperatureHigh: self.temperatureScale == .celsius ? temperatureHighInCelcius : self.convertCelsiusToFahrenheit(temperatureHighInCelcius),
-                                                                          temperatureLow: self.temperatureScale == .celsius ? temperatureLowInCelcius : self.convertCelsiusToFahrenheit(temperatureLowInCelcius))
+                                                                               day: index == 0 ? "CityVM.Day.Today.Title".localized : self.toWeekday(from: (cityWeatherList.first?.dt ?? 0) + (index * 24 * 3600)),
+                                                                               icon: icon,
+                                                                               temperatureHigh: self.temperatureScale == .celsius ? temperatureHighInCelcius : self.convertCelsiusToFahrenheit(temperatureHighInCelcius),
+                                                                               temperatureLow: self.temperatureScale == .celsius ? temperatureLowInCelcius : self.convertCelsiusToFahrenheit(temperatureLowInCelcius))
                             tempCityForecast.append(cityForecast)
-                                                        
+                            
                             if index == 0 {
                                 let condtionDict: [String: Any?] = cityWeatherList.first?.main.asDictionary ?? [:]
                                 for (key, value) in condtionDict {

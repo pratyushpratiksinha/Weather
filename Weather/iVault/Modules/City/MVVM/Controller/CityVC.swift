@@ -46,6 +46,15 @@ class CityVC: UIViewController {
         return btn
     }()
     
+    private let backgroundImageView : UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.layer.cornerRadius = 10.0
+        imageView.clipsToBounds = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: CGRect(x: 0, y: 0, width: 0, height: 0), collectionViewLayout: layout)
@@ -102,9 +111,8 @@ extension CityVC: UIGestureRecognizerDelegate {
 private extension CityVC {
     func setupUI() {
         setupView()
-        if self.isBeingPresented {
-            setupTopBar()
-        }
+        setupBackgroundImage()
+        setupTopBar()
         setupCollectionView()
     }
     
@@ -124,29 +132,44 @@ private extension CityVC {
     }
     
     func setupTopBar() {
-        view.addSubview(topBarView)
-        NSLayoutConstraint.activate([
-            topBarView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
-            topBarView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-            topBarView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-            topBarView.heightAnchor.constraint(equalToConstant: 48)
-        ])
-        
-        topBarView.addSubview(dismissButton)
-        NSLayoutConstraint.activate([
-            dismissButton.topAnchor.constraint(equalTo: topBarView.topAnchor),
-            dismissButton.bottomAnchor.constraint(equalTo: topBarView.bottomAnchor),
-            dismissButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-        ])
-        dismissButton.addTarget(self, action: #selector(dismissButtonCTA), for: .touchUpInside)
-        
-        topBarView.addSubview(addButton)
-        NSLayoutConstraint.activate([
-            addButton.topAnchor.constraint(equalTo: topBarView.topAnchor),
-            addButton.bottomAnchor.constraint(equalTo: topBarView.bottomAnchor),
-            addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-        ])
-        addButton.addTarget(self, action: #selector(addButtonCTA), for: .touchUpInside)
+        if self.isBeingPresented {
+            view.addSubview(topBarView)
+            NSLayoutConstraint.activate([
+                topBarView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
+                topBarView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+                topBarView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+                topBarView.heightAnchor.constraint(equalToConstant: 48)
+            ])
+            
+            topBarView.addSubview(dismissButton)
+            NSLayoutConstraint.activate([
+                dismissButton.topAnchor.constraint(equalTo: topBarView.topAnchor),
+                dismissButton.bottomAnchor.constraint(equalTo: topBarView.bottomAnchor),
+                dismissButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            ])
+            dismissButton.addTarget(self, action: #selector(dismissButtonCTA), for: .touchUpInside)
+            
+            topBarView.addSubview(addButton)
+            NSLayoutConstraint.activate([
+                addButton.topAnchor.constraint(equalTo: topBarView.topAnchor),
+                addButton.bottomAnchor.constraint(equalTo: topBarView.bottomAnchor),
+                addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            ])
+            addButton.addTarget(self, action: #selector(addButtonCTA), for: .touchUpInside)
+        }
+    }
+    
+    func setupBackgroundImage() {
+        if let backgroundImage = cityData?.backgroundImage {
+            view.addSubview(backgroundImageView)
+            NSLayoutConstraint.activate([
+                backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
+                backgroundImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            ])
+            backgroundImageView.image = UIImage(named: backgroundImage)
+        }
     }
     
     func setupCollectionView() {
@@ -180,15 +203,10 @@ private extension CityVC {
 
 extension CityVC {
     func setupBinding() {
-        viewModel.temperatureScale = temperatureScale
+        viewModel.setTemperatureScale(temperatureScale)
         viewModel.cityForecast.bind { [weak self] (_) in
             guard let self = self else { return }
             self.cityWeatherUpdateSnapshot()
-        }
-        
-        viewModel.cityCondition.bind { [weak self] (_) in
-//            guard let self = self else { return }
-//            self.cityWeatherUpdateSnapshot()
         }
     }
 }
@@ -242,16 +260,18 @@ private extension CityVC {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             var snapshot = NSDiffableDataSourceSnapshot<CityWeatherDataCollectionViewSection, CityWeatherDataCollectionViewItem>()
-            snapshot.appendSections([.todayWeather, .forecast, .condition])
             if let cityData = self.cityData {
+                snapshot.appendSections([.todayWeather])
                 snapshot.appendItems([CityWeatherDataCollectionViewItem.todayWeather(cityData)], toSection: .todayWeather)
             }
             if let cityForecastValue = self.viewModel.cityForecast.value {
+                snapshot.appendSections([.forecast])
                 var items = [CityWeatherDataCollectionViewItem]()
                 items = cityForecastValue.compactMap{ CityWeatherDataCollectionViewItem.forecast($0) }
                 snapshot.appendItems(items, toSection: .forecast)
             }
             if let cityConditionValue = self.viewModel.cityCondition.value {
+                snapshot.appendSections([.condition])
                 var items = [CityWeatherDataCollectionViewItem]()
                 items = cityConditionValue.compactMap{ CityWeatherDataCollectionViewItem.condition($0) }
                 snapshot.appendItems(items, toSection: .condition)

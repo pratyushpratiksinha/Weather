@@ -24,7 +24,7 @@ class CityConditionWeatherDataCVC: UICollectionViewCell {
     
     private let customView: UIView = {
         let view = UIView()
-        view.backgroundColor = .gray.withAlphaComponent(0.4)
+        view.backgroundColor = .black.withAlphaComponent(0.5)
         view.layer.cornerRadius = 10.0
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
