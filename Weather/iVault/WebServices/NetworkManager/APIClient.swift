@@ -30,8 +30,8 @@ final class APIClient {
             print("\n\n request ====>>>>>> \(request)")
 
             let sessionConfig = URLSessionConfiguration.default
-            sessionConfig.timeoutIntervalForRequest = 30.0
-            sessionConfig.timeoutIntervalForResource = 60.0
+            sessionConfig.timeoutIntervalForRequest = 20.0
+            sessionConfig.timeoutIntervalForResource = 40.0
             let session = URLSession(configuration: sessionConfig)
             
             let task = session.dataTask(with: request) { (data, response, error) in

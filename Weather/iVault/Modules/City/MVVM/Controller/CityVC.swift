@@ -84,6 +84,7 @@ class CityVC: UIViewController {
     var temperatureScale: TemperatureScale = .celsius
     var delegate: CityDetailTopBarDelegate?
     var cityData: CityTVCModel?
+    var isCityObjectAlreadyAvailableInList = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -156,6 +157,7 @@ private extension CityVC {
                 addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             ])
             addButton.addTarget(self, action: #selector(addButtonCTA), for: .touchUpInside)
+            addButton.isHidden = isCityObjectAlreadyAvailableInList
         }
     }
     

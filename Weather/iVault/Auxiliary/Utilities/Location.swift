@@ -9,27 +9,24 @@ import UIKit
 import CoreLocation
 
 protocol LocationDelegate {
-    func hasLocationPermission() -> Bool
+    func hasLocationPermission(onCompletion: (Bool) -> Void)
 }
 
 extension LocationDelegate where Self: UIViewController {
-    func hasLocationPermission() -> Bool {
-        var hasPermission = false
+    func hasLocationPermission(onCompletion: (Bool) -> Void) {
         let manager = CLLocationManager()
         
         if CLLocationManager.locationServicesEnabled() {
             switch manager.authorizationStatus {
             case .notDetermined, .restricted, .denied:
-                hasPermission = false
+                onCompletion(false)
             case .authorizedAlways, .authorizedWhenInUse:
-                hasPermission = true
+                onCompletion(true)
             @unknown default:
                     break
             }
         } else {
-            hasPermission = false
+            onCompletion(false)
         }
-        
-        return hasPermission
     }
 }

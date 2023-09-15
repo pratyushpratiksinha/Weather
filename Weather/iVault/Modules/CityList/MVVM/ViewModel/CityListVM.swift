@@ -10,6 +10,7 @@ import CoreLocation
 
 class CityListVM: APIServiceProvider, TemperatureScaleConversionDataSource {
     private(set) lazy var cityList = Bindable<[CityTVCModel]>()
+    private(set) lazy var availableObjCity = Bindable<CityTVCModel>()
     private(set) var alert = Bindable<(String, String)>()
     private(set) var error = Bindable<NetworkError>()
     private(set) var temperatureScale: TemperatureScale = .celsius
@@ -69,9 +70,8 @@ extension CityListVM {
                     if self.cityList.value == nil {
                         self.cityList.value = [element]
                     } else {
-                        if self.cityList.value?.contains(where: {$0.id == element.id}) ?? false {
-                            self.alert.value = ("CityListVM.Alert.CityAlreadyAvailable.Title".localized,
-                                                "CityListVM.Alert.CityAlreadyAvailable.Message".localized)
+                        if let obj = self.cityList.value?.first(where: {$0.id == element.id}) {
+                            self.availableObjCity.value = obj
                         } else {
                             self.cityList.value?.append(element)
                         }
@@ -79,10 +79,8 @@ extension CityListVM {
                 }
             case .failure(let error):
                 self.error.value = error
-                if AppIngredients.isRelease == false {
-                    self.alert.value = ("CityListVM.Alert.Faliure.Title".localized,
-                                        error.localizedDescription)
-                }
+                self.alert.value = ("CityListVM.Alert.Faliure.Title".localized,
+                                        error.description)
             }
         }
     }
@@ -106,8 +104,13 @@ extension CityListVM {
                 }
             case .failure(let error):
                 self.error.value = error
-                self.alert.value = ("CityListVM.Alert.Faliure.Title".localized,
-                                    "CityListVM.Alert.ZipcodeNotAvailable.Message".localized)
+                if error == .customError(error: "Error Status Code = 404") {
+                    self.alert.value = ("CityListVM.Alert.Faliure.Title".localized,
+                                        "CityListVM.Alert.ZipcodeNotAvailable.Message".localized)
+                } else {
+                    self.alert.value = ("CityListVM.Alert.Faliure.Title".localized,
+                                        error.description)
+                }
             }
         }
     }
