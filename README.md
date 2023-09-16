@@ -1,6 +1,6 @@
 # Weather Project README
 
-This README provides an overview and instructions for the Weather Project. The Weather Project is a user-friendly mobile application that provides real-time weather information for iOS devices.
+The Weather Project is a user-friendly mobile application that provides real-time weather information for iOS devices. This README.md file serves as a guide to help you understand how to use the app effectively and provides information about its features and functionality.
 
 ## Table of Contents
 
