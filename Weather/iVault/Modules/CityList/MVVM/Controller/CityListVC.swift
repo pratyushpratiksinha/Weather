@@ -138,9 +138,15 @@ private extension CityListVC {
 
 private extension CityListVC {
     
-    func setupPopoverItems(celsiusItem isSelected: Bool = true) {
-        celsiusItem = TemperatureScaleOptionItem(text: "CityVC.Popover.CelsiusItem.Title".localized, isSelected: isSelected)
-        fahrenheitItem = TemperatureScaleOptionItem(text: "CityVC.Popover.FahrenheitItem.Title".localized, isSelected: !isSelected)
+    func setupPopoverItems() {
+        if let scale = viewModel.getTemperatureScaleFromUserDefaults() {
+            celsiusItem = TemperatureScaleOptionItem(text: "CityVC.Popover.CelsiusItem.Title".localized, isSelected: scale == .celsius)
+            fahrenheitItem = TemperatureScaleOptionItem(text: "CityVC.Popover.FahrenheitItem.Title".localized, isSelected: scale == .fahrenheit)
+        } else {
+            viewModel.setTemperatureScaleInUserDefaults(.celsius)
+            celsiusItem = TemperatureScaleOptionItem(text: "CityVC.Popover.CelsiusItem.Title".localized, isSelected: true)
+            fahrenheitItem = TemperatureScaleOptionItem(text: "CityVC.Popover.FahrenheitItem.Title".localized, isSelected: false)
+        }
     }
     
     func setupBinding() {
@@ -400,13 +406,13 @@ extension CityListVC: CityDetailTopBarDelegate {
 extension CityListVC: UIPopoverPresentationControllerDelegate, PopoverOptionItemListVCDelegate {
     func optionItemListViewController(_ controller: PopoverOptionItemListVC, didSelectOptionItem item: PopoverOptionItem) {
         if let item = item as? TemperatureScaleOptionItem {
-            setupPopoverItems(celsiusItem: item.text == celsiusItem?.text)
-            
             switch item.text {
             case fahrenheitItem?.text:
                 if viewModel.temperatureScale == .fahrenheit {
                     return
                 } else {
+                    viewModel.setTemperatureScaleInUserDefaults(.fahrenheit)
+                    setupPopoverItems()
                     elementOperation = .updated
                     viewModel.displayConvertedTemperature(temperatureScale: .fahrenheit)
                 }
@@ -414,6 +420,8 @@ extension CityListVC: UIPopoverPresentationControllerDelegate, PopoverOptionItem
                 if viewModel.temperatureScale == .celsius {
                     return
                 } else {
+                    viewModel.setTemperatureScaleInUserDefaults(.celsius)
+                    setupPopoverItems()
                     elementOperation = .updated
                     viewModel.displayConvertedTemperature(temperatureScale: .celsius)
                 }

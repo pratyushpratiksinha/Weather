@@ -20,3 +20,7 @@ enum ReusableIdentifierCVC: String {
 enum ReusableIdentifierCRV: String {
     case SectionHeaderCRV = "SectionHeaderCRV"
 }
+
+enum UserDefaultsKeys: String {
+    case temperatureScale = "temperatureScale"
+}

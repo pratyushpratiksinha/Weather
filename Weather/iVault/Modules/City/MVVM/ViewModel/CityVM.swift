@@ -13,11 +13,17 @@ class CityVM: APIServiceProvider, TemperatureScaleConversionDataSource, DateTime
     private(set) lazy var cityCondition = Bindable<[CityConditionWeatherDataCVCModel]>()
     private(set) lazy var error = Bindable<NetworkError>()
     private(set) var temperatureScale: TemperatureScale = .celsius
+    private(set) var cityData: CityTVCModel?
+    private var cdCityManager = CDCityManager()
 }
 
 extension CityVM {
     func setTemperatureScale(_ scale: TemperatureScale) {
         self.temperatureScale = scale
+    }
+    
+    func setCityData(_ city: CityTVCModel) {
+        self.cityData = city
     }
 }
 
@@ -63,16 +69,31 @@ extension CityVM {
                             }
                             
                             if index == cityWeatherList.count - 1 {
-                                self.cityCondition.value = tempCityCondition
-                                tempCityCondition = []
-                                self.cityForecast.value = tempCityForecast
-                                tempCityForecast = []
+                                self.cityData?.condition = tempCityCondition
+                                self.cityData?.forecast = tempCityForecast
+                                if let cityData = self.cityData {
+                                    self.cdCityManager.update(record: cityData) { [weak self] (isCityRecordUpdated) in
+                                        guard let self = self else { return }
+                                        if isCityRecordUpdated {
+                                            self.cityCondition.value = tempCityCondition
+                                            tempCityCondition = []
+                                            self.cityForecast.value = tempCityForecast
+                                            tempCityForecast = []
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
                 }
             case .failure(let error):
                 self.error.value = error
+                if let cityData = self.cityData {
+                    self.cdCityManager.get(byIdentifier: cityData.id) { city in
+                        self.cityCondition.value = city?.condition
+                        self.cityForecast.value = city?.forecast
+                    }
+                }
             }
         }
     }

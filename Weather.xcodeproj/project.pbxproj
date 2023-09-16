@@ -19,6 +19,7 @@
 		812915952AB4CA8B00627408 /* CDCityCondition+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812915942AB4CA8B00627408 /* CDCityCondition+Extension.swift */; };
 		8163032D2AB1359A007DA273 /* CityConditionWeatherDataCVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8163032C2AB1359A007DA273 /* CityConditionWeatherDataCVC.swift */; };
 		8163032F2AB135C3007DA273 /* CityForecastWeatherDataCVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8163032E2AB135C3007DA273 /* CityForecastWeatherDataCVC.swift */; };
+		817D67212AB5708400A74424 /* UserDefaultsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817D67202AB5708400A74424 /* UserDefaultsHandler.swift */; };
 		81A7C9D22AB23BA700943F3A /* Extension+UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A7C9D12AB23BA700943F3A /* Extension+UIImageView.swift */; };
 		81B284DC2AB251650086AFD7 /* DateTImeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B284DB2AB251650086AFD7 /* DateTImeHandler.swift */; };
 		81BE4BF22AB524A0005FFCCB /* CDCityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BE4BF12AB524A0005FFCCB /* CDCityManager.swift */; };
@@ -110,6 +111,7 @@
 		812915942AB4CA8B00627408 /* CDCityCondition+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDCityCondition+Extension.swift"; sourceTree = "<group>"; };
 		8163032C2AB1359A007DA273 /* CityConditionWeatherDataCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityConditionWeatherDataCVC.swift; sourceTree = "<group>"; };
 		8163032E2AB135C3007DA273 /* CityForecastWeatherDataCVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityForecastWeatherDataCVC.swift; sourceTree = "<group>"; };
+		817D67202AB5708400A74424 /* UserDefaultsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsHandler.swift; sourceTree = "<group>"; };
 		81A7C9D12AB23BA700943F3A /* Extension+UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UIImageView.swift"; sourceTree = "<group>"; };
 		81B284DB2AB251650086AFD7 /* DateTImeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTImeHandler.swift; sourceTree = "<group>"; };
 		81BE4BF12AB524A0005FFCCB /* CDCityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDCityManager.swift; sourceTree = "<group>"; };
@@ -579,6 +581,7 @@
 				81F971DA2AB09D9400DC8F6D /* Popover.swift */,
 				81D430FD2AB0E5820041966D /* TemperatureScale.swift */,
 				81B284DB2AB251650086AFD7 /* DateTImeHandler.swift */,
+				817D67202AB5708400A74424 /* UserDefaultsHandler.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -815,6 +818,7 @@
 				81ECAE7A2AAF0C070086E341 /* APIService.swift in Sources */,
 				81F4F00D2AAF768E007C4C41 /* CityWeatherRequest.swift in Sources */,
 				81BE4BFF2AB52F5E005FFCCB /* CDCityForecast+CoreDataClass.swift in Sources */,
+				817D67212AB5708400A74424 /* UserDefaultsHandler.swift in Sources */,
 				81F971DB2AB09D9400DC8F6D /* Popover.swift in Sources */,
 				81C0A4722AAFA985009319D7 /* Alert.swift in Sources */,
 				81BE4BF22AB524A0005FFCCB /* CDCityManager.swift in Sources */,

@@ -56,54 +56,48 @@ struct CityListRepository : CityListDataRepository {
     }
     
     func update(record: CityTVCModel, onCompletion: @escaping (Bool) -> Void) {
-        PersistentStorage.shared.persistentContainer.performBackgroundTask { privateManagedContext in
-            getCdCity(byId: record.id) { city in
-                guard let city = city else { return onCompletion(false) }
-                city.cityName = record.cityName
-                city.countryName = record.countryName
-                city.weatherDescription = record.weatherDescription
-                city.backgroundImage = record.backgroundImage
-                city.temperatureCurrent = record.temperatureCurrent
-                city.temperatureHigh = record.temperatureHigh
-                city.temperatureLow = record.temperatureLow
-                city.latitude = record.location.coordinate.latitude
-                city.longitude = record.location.coordinate.longitude
-                
-                if let forecastList = record.forecast,
-                   forecastList.count != 0 {
-                    var forecastSet = Set<CDCityForecast>()
-                    forecastList.forEach({ (forecast) in
-                        let cdCityForecast = CDCityForecast(context: privateManagedContext)
-                        cdCityForecast.id = Int64(forecast.id)
-                        cdCityForecast.day = forecast.day
-                        cdCityForecast.icon = forecast.icon
-                        cdCityForecast.temperatureHigh = forecast.temperatureHigh
-                        cdCityForecast.temperatureLow = forecast.temperatureLow
-                        forecastSet.insert(cdCityForecast)
-                    })
-                    city.toForecast = forecastSet
-                }
-                
-                if let conditionList = record.condition,
-                   conditionList.count != 0 {
-                    var conditionSet = Set<CDCityCondition>()
-                    conditionList.forEach({ (condition) in
-                        let cdCityCondition = CDCityCondition(context: privateManagedContext)
-                        cdCityCondition.id = Int64(condition.id)
-                        cdCityCondition.title = condition.title
-                        cdCityCondition.message = condition.message
-                        conditionSet.insert(cdCityCondition)
-                    })
-                    city.toCondition = conditionSet
-                }
-                
-                if privateManagedContext.hasChanges {
-                    try? privateManagedContext.save()
-                    onCompletion(true)
-                } else {
-                    onCompletion(false)
-                }
+        getCdCity(byId: record.id) { city in
+            guard let city = city else { return onCompletion(false) }
+            city.cityName = record.cityName
+            city.countryName = record.countryName
+            city.weatherDescription = record.weatherDescription
+            city.backgroundImage = record.backgroundImage
+            city.temperatureCurrent = record.temperatureCurrent
+            city.temperatureHigh = record.temperatureHigh
+            city.temperatureLow = record.temperatureLow
+            city.latitude = record.location.coordinate.latitude
+            city.longitude = record.location.coordinate.longitude
+            
+            if let forecastList = record.forecast,
+               forecastList.count != 0 {
+                var forecastSet = Set<CDCityForecast>()
+                forecastList.forEach({ (forecast) in
+                    let cdCityForecast = CDCityForecast(context: PersistentStorage.shared.context)
+                    cdCityForecast.id = Int64(forecast.id)
+                    cdCityForecast.day = forecast.day
+                    cdCityForecast.icon = forecast.icon
+                    cdCityForecast.temperatureHigh = forecast.temperatureHigh
+                    cdCityForecast.temperatureLow = forecast.temperatureLow
+                    forecastSet.insert(cdCityForecast)
+                })
+                city.toForecast = forecastSet
             }
+            
+            if let conditionList = record.condition,
+               conditionList.count != 0 {
+                var conditionSet = Set<CDCityCondition>()
+                conditionList.forEach({ (condition) in
+                    let cdCityCondition = CDCityCondition(context: PersistentStorage.shared.context)
+                    cdCityCondition.id = Int64(condition.id)
+                    cdCityCondition.title = condition.title
+                    cdCityCondition.message = condition.message
+                    conditionSet.insert(cdCityCondition)
+                })
+                city.toCondition = conditionSet
+            }
+            
+            PersistentStorage.shared.saveContext()
+            onCompletion(true)
         }
     }
     

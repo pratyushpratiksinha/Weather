@@ -206,6 +206,11 @@ private extension CityVC {
 extension CityVC {
     func setupBinding() {
         viewModel.setTemperatureScale(temperatureScale)
+        
+        if let city = cityData {
+            viewModel.setCityData(city)
+        }
+        
         viewModel.cityForecast.bind { [weak self] (_) in
             guard let self = self else { return }
             self.cityWeatherUpdateSnapshot()

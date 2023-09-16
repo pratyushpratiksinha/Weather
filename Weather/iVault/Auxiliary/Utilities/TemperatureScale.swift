@@ -7,9 +7,9 @@
 
 import Foundation
 
-enum TemperatureScale {
-    case celsius
-    case fahrenheit
+enum TemperatureScale: String {
+    case celsius = "celsius"
+    case fahrenheit = "fahrenheit"
 }
 
 protocol TemperatureScaleConversionDataSource {

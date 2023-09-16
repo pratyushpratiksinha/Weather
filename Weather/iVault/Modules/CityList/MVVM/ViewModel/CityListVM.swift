@@ -19,6 +19,19 @@ class CityListVM: APIServiceProvider, TemperatureScaleConversionDataSource {
 
 extension CityListVM {
     
+    final func setTemperatureScaleInUserDefaults(_ scale: TemperatureScale) {
+        UserDefaults.temperatureScale = scale.rawValue
+        temperatureScale = scale
+    }
+    
+    final func getTemperatureScaleFromUserDefaults() -> TemperatureScale? {
+        if let scale = TemperatureScale(rawValue: UserDefaults.temperatureScale ?? "") {
+            return scale
+        } else {
+            return nil
+        }
+    }
+    
     final func getCDCityListRecords(onCompletion: @escaping (Bool) -> Void)  {
         if let cityListRecords = cdCityManager.getAll(),
            cityListRecords.count > 0 {
