@@ -11,8 +11,8 @@
         <attribute name="temperatureHigh" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="temperatureLow" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="weatherDescription" optional="YES" attributeType="String"/>
-        <relationship name="toCondition" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDCityCondition" inverseName="toCity" inverseEntity="CDCityCondition"/>
-        <relationship name="toForecast" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDCityForecast" inverseName="toCity" inverseEntity="CDCityForecast"/>
+        <relationship name="toCondition" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDCityCondition" inverseName="toCity" inverseEntity="CDCityCondition"/>
+        <relationship name="toForecast" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDCityForecast" inverseName="toCity" inverseEntity="CDCityForecast"/>
     </entity>
     <entity name="CDCityCondition" representedClassName="CDCityCondition" syncable="YES">
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
