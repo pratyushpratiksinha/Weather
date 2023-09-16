@@ -9,6 +9,7 @@ This README provides an overview and instructions for the Weather Project. The W
 - [Installation](#installation)
 - [Usage](#usage)
 - [Contributing](#contributing)
+- [Roadmap](#roadmap)
 - [License](#license)
 
 ## Features
@@ -18,7 +19,7 @@ This README provides an overview and instructions for the Weather Project. The W
 - **Multiple Locations:** Easily save and switch between different locations to check the weather anywhere in the world.
 - **Search Functionality:** Search for a location by postal code.
 - **Customization:** Personalize your weather app experience by setting your preferred units (Celsius or Fahrenheit).
-
+  
 ## Requirements
 
 To run the Weather Project application, you'll need:
@@ -46,7 +47,7 @@ To run the Weather Project application, you'll need:
 
 1. Open Weather.xcodeproj file in Xcode.
 
-2. Build and run the project on the iOS Simulator or your physical device.      
+2. Build and run the project on the iOS Simulator or your physical device.     
 
 ## Contributing
 
@@ -75,6 +76,16 @@ Contributions to the Weather Project are welcome! If you'd like to contribute, p
    ```
 
 6. Open a pull request on the main repository and provide a clear description of your changes.
+
+## Roadmap
+
+We are continuously working to improve the Weather Project and plan to add the following features in future updates:
+
+- **Weather Radar:** Real-time weather radar maps.
+- **Notifications:** Weather alerts and notifications.
+- **Weather Widgets:** Widgets for your device's home screen.
+
+Stay tuned for updates!
 
 ## License
 
