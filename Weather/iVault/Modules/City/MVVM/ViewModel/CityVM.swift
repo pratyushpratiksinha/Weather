@@ -12,9 +12,9 @@ final class CityVM: APIServiceProvider, TemperatureScaleConversionDataSource, Da
     private(set) lazy var cityForecast = Bindable<[CityForecastWeatherDataCVCModel]>()
     private(set) lazy var cityCondition = Bindable<[CityConditionWeatherDataCVCModel]>()
     private(set) lazy var error = Bindable<NetworkError>()
-    private(set) var temperatureScale: TemperatureScale = .celsius
-    private(set) var isTemperatureScaleModified = false
-    private(set) var cityData: CityTVCModel?
+    private var cityData: CityTVCModel?
+    private var temperatureScale: TemperatureScale = .celsius
+    private var isTemperatureScaleModified = false
     private var cdCityManager = CDCityManager()
 }
 
