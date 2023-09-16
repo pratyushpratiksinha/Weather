@@ -216,7 +216,7 @@ private extension CityListVC {
         return dataSource
     }
     
-    func cityListUpdateSnapshot(animatingChange: Bool = true) {
+    func cityListUpdateSnapshot(animatingChange: Bool = false) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.inspectNilDataNilData(for: self.tableView, with: (self.viewModel.cityList.value ?? []) as Array<AnyObject>)
