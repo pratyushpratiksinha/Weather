@@ -11,8 +11,8 @@ protocol APIServiceProvider {
     func request<T: URN>(with URN: T, onCompletion: @escaping (Result<T.Derived, NetworkError>) -> Void)
 }
 
-extension APIServiceProvider where Self: AnyObject {
+final class APIService: APIClient, APIServiceProvider {
     func request<T: URN>(with URN: T, onCompletion: @escaping (Result<T.Derived, NetworkError>) -> Void) {
-        APIClient().fireAPI(with: URN, onCompletion: onCompletion)
+        fireAPI(with: URN, onCompletion: onCompletion)
     }
 }

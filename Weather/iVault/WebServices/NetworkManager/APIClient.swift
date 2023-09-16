@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-final class APIClient {
+class APIClient {
     
     final func fireAPI<T: URN>(with urnData: T, onCompletion: @escaping (Result<T.Derived, NetworkError>) -> Void) {
         

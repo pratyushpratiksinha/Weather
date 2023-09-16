@@ -8,13 +8,18 @@
 import Foundation
 import CoreLocation
 
-final class CityListVM: APIServiceProvider, TemperatureScaleConversionDataSource {
+final class CityListVM: TemperatureScaleConversionDataSource {
     private(set) lazy var cityList = Bindable<[CityTVCModel]>()
     private(set) lazy var availableObjCity = Bindable<CityTVCModel>()
     private(set) lazy var alert = Bindable<(String, String)>()
     private(set) lazy var error = Bindable<NetworkError>()
     private(set) var temperatureScale: TemperatureScale = .celsius
     private var cdCityManager = CDCityManager()
+    private let apiService: APIServiceProvider
+    
+    init(apiService: APIServiceProvider = APIService()) {
+        self.apiService = apiService
+    }
 }
 
 extension CityListVM {
@@ -79,7 +84,7 @@ extension CityListVM {
 //handling weather API
 extension CityListVM {
     
-    final func fireAPIGETWeather(for location: CLLocation) {
+    final func fireAPIGETWeather(for location: CLLocation, onCompletion: (() -> ())? = nil) {
         getWeather(for: location){ [weak self] (result) in
             guard let self = self else { return }
             switch result {
@@ -109,6 +114,7 @@ extension CityListVM {
                         self.cdCityManager.create(record: element) { isCreatedCityRecord in
                             if isCreatedCityRecord {
                                 self.cityList.value = self.cdCityManager.getAll()
+                                onCompletion?()
                             }
                         }
                     } else {
@@ -118,6 +124,7 @@ extension CityListVM {
                             self.cdCityManager.create(record: element) { isCreatedCityRecord in
                                 if isCreatedCityRecord {
                                     self.cityList.value?.append(element)
+                                    onCompletion?()
                                 }
                             }
                         }
@@ -132,7 +139,7 @@ extension CityListVM {
     }
     
     private func getWeather(for location: CLLocation, onCompletion: @escaping (Result<CityWeatherResponse, NetworkError>) -> Void) {
-        request(with: GETWeatherDataURN(location: location), onCompletion: onCompletion)
+        apiService.request(with: GETWeatherDataURN(location: location), onCompletion: onCompletion)
     }
 }
 
@@ -161,7 +168,7 @@ extension CityListVM {
     }
     
     private func getGeo(from zipCode: String, onCompletion: @escaping (Result<GeoResponse, NetworkError>) -> Void) {
-        request(with: GETGeoDataURN(zip: zipCode), onCompletion: onCompletion)
+        apiService.request(with: GETGeoDataURN(zip: zipCode), onCompletion: onCompletion)
     }
 }
 
@@ -191,5 +198,12 @@ extension CityListVM {
                 return
             }
         }
+    }
+}
+
+//testing
+extension CityListVM {
+    func testCityList(for model: CityTVCModel) {
+        self.cityList.value = [model]
     }
 }

@@ -8,7 +8,7 @@
 import Foundation
 import CoreLocation
 
-final class CityVM: APIServiceProvider, TemperatureScaleConversionDataSource, DateTimeDataSource {
+final class CityVM: TemperatureScaleConversionDataSource, DateTimeDataSource {
     private(set) lazy var cityForecast = Bindable<[CityForecastWeatherDataCVCModel]>()
     private(set) lazy var cityCondition = Bindable<[CityConditionWeatherDataCVCModel]>()
     private(set) lazy var error = Bindable<NetworkError>()
@@ -16,6 +16,11 @@ final class CityVM: APIServiceProvider, TemperatureScaleConversionDataSource, Da
     private var temperatureScale: TemperatureScale = .celsius
     private var isTemperatureScaleModified = false
     private var cdCityManager = CDCityManager()
+    private let apiService: APIServiceProvider
+    
+    init(apiService: APIServiceProvider = APIService()) {
+        self.apiService = apiService
+    }
 }
 
 extension CityVM {
@@ -170,6 +175,6 @@ extension CityVM {
     }
     
     private func getWeatherForecast(for location: CLLocation, onCompletion: @escaping (Result<CityWeatherForecastResponse, NetworkError>) -> Void) {
-        request(with: GETWeatherForecastDataURN(location: location, count: 7), onCompletion: onCompletion)
+        apiService.request(with: GETWeatherForecastDataURN(location: location, count: 7), onCompletion: onCompletion)
     }
 }

@@ -22,6 +22,8 @@
 		817D67212AB5708400A74424 /* UserDefaultsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817D67202AB5708400A74424 /* UserDefaultsHandler.swift */; };
 		81A7C9D22AB23BA700943F3A /* Extension+UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A7C9D12AB23BA700943F3A /* Extension+UIImageView.swift */; };
 		81B284DC2AB251650086AFD7 /* DateTImeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81B284DB2AB251650086AFD7 /* DateTImeHandler.swift */; };
+		81BE2B2D2AB6391E007DE995 /* MockCityListAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BE2B2C2AB6391E007DE995 /* MockCityListAPIService.swift */; };
+		81BE2B2F2AB63B9A007DE995 /* CityListVMTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BE2B2E2AB63B9A007DE995 /* CityListVMTests.swift */; };
 		81BE4BF22AB524A0005FFCCB /* CDCityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BE4BF12AB524A0005FFCCB /* CDCityManager.swift */; };
 		81BE4BF42AB524AF005FFCCB /* CDCityForecastManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BE4BF32AB524AF005FFCCB /* CDCityForecastManager.swift */; };
 		81BE4BF62AB524BD005FFCCB /* CDCityConditionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BE4BF52AB524BD005FFCCB /* CDCityConditionManager.swift */; };
@@ -114,6 +116,8 @@
 		817D67202AB5708400A74424 /* UserDefaultsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsHandler.swift; sourceTree = "<group>"; };
 		81A7C9D12AB23BA700943F3A /* Extension+UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UIImageView.swift"; sourceTree = "<group>"; };
 		81B284DB2AB251650086AFD7 /* DateTImeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateTImeHandler.swift; sourceTree = "<group>"; };
+		81BE2B2C2AB6391E007DE995 /* MockCityListAPIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCityListAPIService.swift; sourceTree = "<group>"; };
+		81BE2B2E2AB63B9A007DE995 /* CityListVMTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityListVMTests.swift; sourceTree = "<group>"; };
 		81BE4BF12AB524A0005FFCCB /* CDCityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDCityManager.swift; sourceTree = "<group>"; };
 		81BE4BF32AB524AF005FFCCB /* CDCityForecastManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDCityForecastManager.swift; sourceTree = "<group>"; };
 		81BE4BF52AB524BD005FFCCB /* CDCityConditionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDCityConditionManager.swift; sourceTree = "<group>"; };
@@ -336,6 +340,8 @@
 			isa = PBXGroup;
 			children = (
 				81ECAE362AAEEE3C0086E341 /* WeatherTests.swift */,
+				81BE2B2C2AB6391E007DE995 /* MockCityListAPIService.swift */,
+				81BE2B2E2AB63B9A007DE995 /* CityListVMTests.swift */,
 			);
 			path = WeatherTests;
 			sourceTree = "<group>";
@@ -853,6 +859,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				81ECAE372AAEEE3C0086E341 /* WeatherTests.swift in Sources */,
+				81BE2B2D2AB6391E007DE995 /* MockCityListAPIService.swift in Sources */,
+				81BE2B2F2AB63B9A007DE995 /* CityListVMTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
