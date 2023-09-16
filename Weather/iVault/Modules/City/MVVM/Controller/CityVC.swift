@@ -102,18 +102,18 @@ extension CityVC {
 }
 
 private extension CityVC {
-    final func setupUI() {
+    func setupUI() {
         setupView()
         setupBackgroundImage()
         setupTopBar()
         setupCollectionView()
     }
     
-    final func setupView() {
+    func setupView() {
         view.backgroundColor = UIColor("#89CFF0")
     }
     
-    final func setupTopBar() {
+    func setupTopBar() {
         if self.isBeingPresented {
             view.addSubview(topBarView)
             NSLayoutConstraint.activate([
@@ -142,7 +142,7 @@ private extension CityVC {
         }
     }
     
-    final func setupBackgroundImage() {
+    func setupBackgroundImage() {
         if let backgroundImage = cityData?.backgroundImage {
             view.addSubview(backgroundImageView)
             NSLayoutConstraint.activate([
@@ -155,7 +155,7 @@ private extension CityVC {
         }
     }
     
-    final func setupCollectionView() {
+    func setupCollectionView() {
         view.addSubview(collectionView)
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: self.isBeingPresented ? 64 : 16),
@@ -184,8 +184,8 @@ private extension CityVC {
     }
 }
 
-extension CityVC {
-    final func setupBinding() {
+private extension CityVC {
+    func setupBinding() {
         viewModel.setTemperatureScale(temperatureScale)
         
         if let city = cityData {
@@ -294,8 +294,8 @@ extension CityVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     }
 }
 
-extension CityVC {
-    final func fireForecastAPI() {
+private extension CityVC {
+    func fireForecastAPI() {
         viewModel.getOfflineData()
         if let latitude = cityData?.location.coordinate.latitude,
            let longitude = cityData?.location.coordinate.longitude {

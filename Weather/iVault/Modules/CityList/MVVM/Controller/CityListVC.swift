@@ -67,12 +67,12 @@ class CityListVC: UIViewController {
 }
 
 private extension CityListVC {
-    final func setupUI() {
+    func setupUI() {
         setupTableView()
         setupPopoverItems()
     }
     
-    final func setupNavigationBar() {
+    func setupNavigationBar() {
         navigationItem.title = "CityListVC.NavigationItem.Title".localized
         navigationController?.navigationBar.prefersLargeTitles = true
         let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
@@ -92,7 +92,7 @@ private extension CityListVC {
         }
     }
     
-    final func presentOptionsPopover(withOptionItems items: [[PopoverOptionItem]], fromBarButtonItem barButtonItem: UIBarButtonItem) {
+    func presentOptionsPopover(withOptionItems items: [[PopoverOptionItem]], fromBarButtonItem barButtonItem: UIBarButtonItem) {
         let optionItemListVC = PopoverOptionItemListVC()
         optionItemListVC.items = items
         optionItemListVC.delegate = self
@@ -103,7 +103,7 @@ private extension CityListVC {
         self.present(optionItemListVC, animated: true, completion: nil)
     }
     
-    final func setupTableView() {
+    func setupTableView() {
         view.addSubview(tableView)
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -120,7 +120,7 @@ private extension CityListVC {
 
 private extension CityListVC {
     
-    final func setupPopoverItems() {
+    func setupPopoverItems() {
         if let scale = viewModel.getTemperatureScaleFromUserDefaults() {
             viewModel.setTemperatureScaleInUserDefaults(scale)
             celsiusItem = TemperatureScaleOptionItem(text: "CityVC.Popover.CelsiusItem.Title".localized, isSelected: scale == .celsius)
@@ -132,7 +132,7 @@ private extension CityListVC {
         }
     }
     
-    final func setupBinding() {
+    func setupBinding() {
         viewModel.cityList.bind { [weak self] (value) in
             guard let self = self else { return }
             if self.coreDataModel == .existing ||
@@ -172,7 +172,7 @@ private extension CityListVC {
         }
     }
     
-    final func getWeather(for location: CLLocation) {
+    func getWeather(for location: CLLocation) {
         DispatchQueue.global(qos: .background).async { [weak self] in
             guard let self = self else { return }
             self.startLoaderAnimation()
@@ -216,7 +216,7 @@ private extension CityListVC {
         return dataSource
     }
     
-    final func cityListUpdateSnapshot(animatingChange: Bool = true) {
+    func cityListUpdateSnapshot(animatingChange: Bool = true) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.inspectNilDataNilData(for: self.tableView, with: (self.viewModel.cityList.value ?? []) as Array<AnyObject>)
