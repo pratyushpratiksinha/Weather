@@ -9,7 +9,6 @@ import Foundation
 import CoreLocation
 
 extension CDCity {
-    
     func convertToCityTVCModel() -> CityTVCModel {
         return CityTVCModel(id: Int(self.id), cityName: self.cityName ?? "" , countryName: self.countryName ?? "", weatherDescription: self.weatherDescription ?? "", backgroundImage: self.backgroundImage, temperatureCurrent: self.temperatureCurrent, temperatureHigh: self.temperatureHigh, temperatureLow: self.temperatureLow, location: CLLocation(latitude: self.latitude, longitude: self.longitude), forecast: convertToCityForecastWeatherDataCVCModel(), condition: convertToCityConditionWeatherDataCVCModel())
     }
