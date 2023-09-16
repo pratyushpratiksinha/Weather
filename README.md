@@ -16,9 +16,9 @@ The Weather Project is a user-friendly mobile application that provides real-tim
 
 ## Features
 
-- **Current Weather:** Get up-to-date weather information for your current location or any location you specify.
+- **Current Weather:** Get up-to-date weather information for available locations in [Weather API Provider](https://openweathermap.org/api).
 - **7-Day Forecast:** Check the weather forecast for the next seven days to prepare for the week ahead.
-- **Multiple Locations:** Easily save and switch between different locations to check the weather anywhere in the world. You can store up to 10 cities in the list. You can remove the unessential city by left swiping.  
+- **Multiple Locations:** Easily save and switch between different locations to check the weather of locations available in [Weather API Provider](https://openweathermap.org/api). You can store up to 10 cities in the list. You can remove the unessential city by left-swiping.  
 - **Search Functionality:** Search for a location by postal code.
 - **Customization:** Personalize your weather app experience by setting your preferred units (Celsius or Fahrenheit).
 
