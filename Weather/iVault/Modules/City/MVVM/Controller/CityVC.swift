@@ -91,19 +91,6 @@ class CityVC: UIViewController {
         cityWeatherUpdateSnapshot()
         fireForecastAPI()
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        if self.isMovingToParent {
-            setupNavigationBar()
-        }
-    }
-}
-
-extension CityVC: UIGestureRecognizerDelegate {
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
-    }
 }
 
 extension CityVC {
@@ -120,17 +107,6 @@ private extension CityVC {
         setupBackgroundImage()
         setupTopBar()
         setupCollectionView()
-    }
-    
-    final func setupNavigationBar() {
-        navigationController?.navigationBar.tintColor = .white
-        navigationController?.navigationBar.prefersLargeTitles = false
-        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-        navigationController?.navigationBar.titleTextAttributes = textAttributes
-        navigationController?.navigationBar.largeTitleTextAttributes = textAttributes
-        self.navigationController?.navigationBar.isTranslucent = true
-        self.navigationController?.navigationBar.backgroundColor = .clear
-        navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
     final func setupView() {

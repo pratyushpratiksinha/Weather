@@ -142,17 +142,7 @@ private extension CityListVC {
             } else {
                 DispatchQueue.main.async {
                     self.stopLoaderAnimation()
-                    
-                    let cityVC = CityVC()
-                    cityVC.set(delegate: self, cityData: value?.last, temperatureScale: self.viewModel.temperatureScale)
-                    if let sheet = cityVC.sheetPresentationController {
-                        sheet.detents = [.large()]
-                        sheet.largestUndimmedDetentIdentifier = .medium
-                        sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-                        sheet.prefersEdgeAttachedInCompactHeight = true
-                        sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
-                    }
-                    self.present(cityVC, animated: true)
+                    self.presentCityVC(delegate: self, cityData: value?.last)
                 }
             }
             self.coreDataModel = .notExisting
@@ -163,17 +153,7 @@ private extension CityListVC {
             guard let self = self else { return }
             DispatchQueue.main.async {
                 self.stopLoaderAnimation()
-                
-                let cityVC = CityVC()
-                cityVC.set(cityData: value, temperatureScale: self.viewModel.temperatureScale)
-                if let sheet = cityVC.sheetPresentationController {
-                    sheet.detents = [.large()]
-                    sheet.largestUndimmedDetentIdentifier = .medium
-                    sheet.prefersScrollingExpandsWhenScrolledToEdge = false
-                    sheet.prefersEdgeAttachedInCompactHeight = true
-                    sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
-                }
-                self.present(cityVC, animated: true)
+                self.presentCityVC(cityData: value)
             }
         }
         
@@ -205,9 +185,7 @@ extension CityListVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let value = viewModel.cityList.value {
             if indexPath.row <= value.count - 1 {
-                let cityVC = CityVC()
-                cityVC.set(cityData: value[indexPath.row], temperatureScale: self.viewModel.temperatureScale)
-                self.navigationController?.pushViewController(cityVC, animated: false)
+                presentCityVC(cityData: value[indexPath.row])
             }
         }
     }
@@ -378,8 +356,6 @@ extension CityListVC: CityDetailTopBarDelegate {
     }
 }
 
-
-
 extension CityListVC: UIPopoverPresentationControllerDelegate, PopoverOptionItemListVCDelegate {
     func optionItemListViewController(_ controller: PopoverOptionItemListVC, didSelectOptionItem item: PopoverOptionItem) {
         viewModel.optionItemList(didSelectOptionItem: item) { [weak self] (elementOperation) in
@@ -400,5 +376,21 @@ extension CityListVC: UIPopoverPresentationControllerDelegate, PopoverOptionItem
 
     func popoverPresentationControllerShouldDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) -> Bool {
         return true
+    }
+}
+
+extension CityListVC {
+    
+    private func presentCityVC(delegate: CityDetailTopBarDelegate? = nil, cityData: CityTVCModel?) {
+        let cityVC = CityVC()
+        cityVC.set(delegate: delegate, cityData: cityData, temperatureScale: self.viewModel.temperatureScale)
+        if let sheet = cityVC.sheetPresentationController {
+            sheet.detents = [.large()]
+            sheet.largestUndimmedDetentIdentifier = .medium
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = false
+            sheet.prefersEdgeAttachedInCompactHeight = true
+            sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = true
+        }
+        self.present(cityVC, animated: true)
     }
 }
