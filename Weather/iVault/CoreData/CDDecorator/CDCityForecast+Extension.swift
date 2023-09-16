@@ -9,6 +9,6 @@ import Foundation
 
 extension CDCityForecast {
     func convertToCityForecastWeatherDataCVCModel() -> CityForecastWeatherDataCVCModel {
-        return CityForecastWeatherDataCVCModel(id: Int(self.id), day: self.day ?? "", icon: self.icon ?? "", temperatureHigh: self.temperatureHigh, temperatureLow: self.temperatureLow)
+        return CityForecastWeatherDataCVCModel(id: Int(self.id), dt: Int(self.dt), day: self.day ?? "", icon: self.icon ?? "", temperatureHigh: self.temperatureHigh, temperatureLow: self.temperatureLow)
     }
 }

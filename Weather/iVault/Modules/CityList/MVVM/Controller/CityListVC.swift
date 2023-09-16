@@ -238,7 +238,7 @@ private extension CityListVC {
         return dataSource
     }
     
-    final func cityListUpdateSnapshot(animatingChange: Bool = false) {
+    final func cityListUpdateSnapshot(animatingChange: Bool = true) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.inspectNilDataNilData(for: self.tableView, with: (self.viewModel.cityList.value ?? []) as Array<AnyObject>)
@@ -246,7 +246,7 @@ private extension CityListVC {
             var snapshot = NSDiffableDataSourceSnapshot<CityListTableViewSection, CityTVCModel>()
             snapshot.appendSections([.all])
             snapshot.appendItems(self.viewModel.cityList.value ?? [], toSection: .all)
-            self.cityListDataSource.apply(snapshot, animatingDifferences: false) {
+            self.cityListDataSource.apply(snapshot, animatingDifferences: animatingChange) {
                 self.stopLoaderAnimation()
             }
         }

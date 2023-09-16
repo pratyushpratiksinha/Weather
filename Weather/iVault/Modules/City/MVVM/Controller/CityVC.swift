@@ -272,7 +272,7 @@ private extension CityVC {
         return dataSource
     }
     
-    private func cityWeatherUpdateSnapshot(animatingChange: Bool = false) {
+    private func cityWeatherUpdateSnapshot(animatingChange: Bool = true) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             var snapshot = NSDiffableDataSourceSnapshot<CityWeatherDataCollectionViewSection, CityWeatherDataCollectionViewItem>()
@@ -292,7 +292,7 @@ private extension CityVC {
                 items = cityConditionValue.compactMap{ CityWeatherDataCollectionViewItem.condition($0) }
                 snapshot.appendItems(items, toSection: .condition)
             }
-            self.cityWeatherDataSource.apply(snapshot, animatingDifferences: false)
+            self.cityWeatherDataSource.apply(snapshot, animatingDifferences: animatingChange)
         }
     }
 }
@@ -324,6 +324,7 @@ extension CityVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 
 extension CityVC {
     final func fireForecastAPI() {
+        viewModel.getOfflineData()
         if let latitude = cityData?.location.coordinate.latitude,
            let longitude = cityData?.location.coordinate.longitude {
             viewModel.fireAPIGETWeatherForecast(for: CLLocation(latitude: latitude, longitude: longitude))

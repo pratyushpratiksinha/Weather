@@ -19,6 +19,11 @@ final class CityVM: APIServiceProvider, TemperatureScaleConversionDataSource, Da
 }
 
 extension CityVM {
+    
+    final func getOfflineData() {
+        offlineWeatherData()
+    }
+    
     final func setTemperatureScale(_ scale: TemperatureScale) {
         self.temperatureScale = scale
         self.isTemperatureScaleModified = UserDefaults.isTemperatureScaleModified ?? false
@@ -46,24 +51,28 @@ extension CityVM {
                 }
             case .failure(let error):
                 self.error.value = error
-                if let cityData = self.cityData {
-                    self.cdCityManager.get(byIdentifier: cityData.id) { city in
-                        if self.isTemperatureScaleModified {
-                            self.setTemperatureScale(isModified: false)
-                            if let city = city {
-                                self.offlineWeatherForecastOperationOnTemperatureScaleModifiation(for: city)
-                            }
-                        } else {
-                            self.cityCondition.value = city?.condition
-                            self.cityForecast.value = city?.forecast
-                        }
+                self.offlineWeatherData()
+            }
+        }
+    }
+    
+    private func offlineWeatherData() {
+        if let cityData = self.cityData {
+            self.cdCityManager.get(byIdentifier: cityData.id) { city in
+                if self.isTemperatureScaleModified {
+                    self.setTemperatureScale(isModified: false)
+                    if let city = city {
+                        self.offlineWeatherOperationOnTemperatureScaleModifiation(for: city)
                     }
+                } else {
+                    self.cityCondition.value = city?.condition?.sorted { $0.title < $1.title }
+                    self.cityForecast.value = city?.forecast?.sorted { $0.dt < $1.dt }
                 }
             }
         }
     }
     
-    private func offlineWeatherForecastOperationOnTemperatureScaleModifiation(for city: CityTVCModel) {
+    private func offlineWeatherOperationOnTemperatureScaleModifiation(for city: CityTVCModel) {
         DispatchQueue.global(qos: .userInteractive).async { [weak self] in
             guard let self = self else { return }
             var tempCityForecast = city.forecast
@@ -81,7 +90,7 @@ extension CityVM {
                         if let cityData = self.cityData {
                             self.cdCityManager.update(record: cityData) { (isCityRecordUpdated) in
                                 if isCityRecordUpdated {
-                                    self.cityForecast.value = tempCityForecast
+                                    self.cityForecast.value = tempCityForecast?.sorted { $0.dt < $1.dt }
                                 }
                             }
                         }
@@ -99,7 +108,7 @@ extension CityVM {
                     if let cityData = self.cityData {
                         self.cdCityManager.update(record: cityData) { (isCityRecordUpdated) in
                             if isCityRecordUpdated {
-                                self.cityCondition.value = tempCityCondition
+                                self.cityCondition.value = tempCityCondition?.sorted { $0.title < $1.title }
                             }
                         }
                     }
@@ -118,6 +127,7 @@ extension CityVM {
                 let temperatureLowInCelcius = self.convertKelvinToCelsius(cityWeatherList[index].main.tempMin)
                 let icon = BaseUrl.icon.rawValue + EndPoints.icon.rawValue + (cityWeatherList[index].weather?.first?.icon ?? "") + ImageType.png.rawValue
                 let cityForecast = CityForecastWeatherDataCVCModel(id: cityWeatherList[index].dt,
+                                                                   dt: (cityWeatherList.first?.dt ?? 0) + (index * 24 * 3600),
                                                                    day: index == 0 ? "CityVM.Day.Today.Title".localized : self.toWeekday(from: (cityWeatherList.first?.dt ?? 0) + (index * 24 * 3600)),
                                                                    icon: icon,
                                                                    temperatureHigh: self.temperatureScale == .celsius ? temperatureHighInCelcius : self.convertCelsiusToFahrenheit(temperatureHighInCelcius),
@@ -147,9 +157,9 @@ extension CityVM {
                     if let cityData = self.cityData {
                         self.cdCityManager.update(record: cityData) { (isCityRecordUpdated) in
                             if isCityRecordUpdated {
-                                self.cityCondition.value = tempCityCondition
+                                self.cityCondition.value = tempCityCondition.sorted { $0.title < $1.title }
                                 tempCityCondition = []
-                                self.cityForecast.value = tempCityForecast
+                                self.cityForecast.value = tempCityForecast.sorted { $0.dt < $1.dt }
                                 tempCityForecast = []
                             }
                         }

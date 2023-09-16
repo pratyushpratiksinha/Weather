@@ -75,6 +75,7 @@ struct CityListRepository : CityListDataRepository {
                     let cdCityForecast = CDCityForecast(context: PersistentStorage.shared.context)
                     cdCityForecast.id = Int64(forecast.id)
                     cdCityForecast.day = forecast.day
+                    cdCityForecast.dt = Int64(forecast.dt)
                     cdCityForecast.icon = forecast.icon
                     cdCityForecast.temperatureHigh = forecast.temperatureHigh
                     cdCityForecast.temperatureLow = forecast.temperatureLow

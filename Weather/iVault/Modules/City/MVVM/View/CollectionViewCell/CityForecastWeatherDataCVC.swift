@@ -9,6 +9,7 @@ import UIKit
 
 struct CityForecastWeatherDataCVCModel: Hashable {
     let id: Int
+    let dt: Int
     let day: String
     let icon: String
     var temperatureHigh: Double
@@ -19,7 +20,7 @@ struct CityForecastWeatherDataCVCModel: Hashable {
     }
     
     static func == (lhs: CityForecastWeatherDataCVCModel, rhs: CityForecastWeatherDataCVCModel) -> Bool {
-        lhs.id == rhs.id && lhs.day == rhs.day && lhs.icon == rhs.icon && lhs.temperatureHigh == rhs.temperatureHigh && lhs.temperatureLow == rhs.temperatureLow
+        lhs.id == rhs.id && lhs.dt == rhs.dt && lhs.day == rhs.day && lhs.icon == rhs.icon && lhs.temperatureHigh == rhs.temperatureHigh && lhs.temperatureLow == rhs.temperatureLow
     }
 }
 

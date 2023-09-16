@@ -17,6 +17,7 @@ extension CDCityForecast {
     }
 
     @NSManaged public var day: String?
+    @NSManaged public var dt: Int64
     @NSManaged public var icon: String?
     @NSManaged public var id: Int64
     @NSManaged public var temperatureHigh: Double
