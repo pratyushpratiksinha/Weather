@@ -6,6 +6,7 @@ The Weather Project is a user-friendly mobile application that provides real-tim
 
 - [Features](#features)
 - [Requirements](#requirements)
+- [Technologies Used](#technologies-used)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Contributing](#contributing)
@@ -27,6 +28,14 @@ To run the Weather Project application, you'll need:
 - Xcode 14.2 or higher
 - iOS 15 or higher
 - Swift 5 or higher
+
+## Technologies Used
+
+- **Swift:** The programming language used for iOS app development.
+- **UIKit:** The UI framework for building iOS user interfaces.
+- **Core Location:** Used to access location data for weather information.
+- **Core Data:** Used to store and retrieve data for offline storage.
+- **API Integration:** We integrate with [Weather API Provider](https://openweathermap.org/api) free version to fetch weather data.
 
 ## Installation
 
