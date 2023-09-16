@@ -68,11 +68,11 @@ enum WeatherDescription: String {
     var dayImage: String {
         switch self {
         case .clearSky:
-            return "imageClearSky"
+            return "imageClearSkyDay"
         case .fewClouds:
-            return "imageFewClouds"
+            return "imageFewCloudsDay"
         case .scatteredClouds, .brokenClouds, .overcastClouds:
-            return "imageScatteredClouds"
+            return "imageScatteredCloudsDay"
         case .showerRain, .rain, .lightRain, .moderateRain, .heavyIntensityRain, .veryHeavyRain, .extremeRain, .heavyIntensityShowerRain, .lightIntensityShowerRain, .freezingRain, .raggedShowerRain, .drizzle, .lightIntensityDrizzle, .heavyIntensityDrizzle, .drizzleRain, .lightIntensityDrizzleRain, .heavyIntensityDrizzleRain, .showerRainAndDrizzle, .heavyShowerRainAndDrizzle, .showerDrizzle:
             return "imageRainDay"
         case .thunderstorm, .thunderstormWithLightRain, .thunderstormWithRain, .thunderstormWithHeavyRain, .lightThunderstorm, .heavyThunderstorm, .raggedThunderstorm, .thunderstormWithLightDrizzle, .thunderstormWithDrizzle, .thunderstormWithHeavyDrizzle:
@@ -103,9 +103,9 @@ enum WeatherDescription: String {
         case .clearSky:
             return "imageClearSkyNight"
         case .fewClouds:
-            return "imageFewClouds"
+            return "imageFewCloudsNight"
         case .scatteredClouds, .brokenClouds, .overcastClouds:
-            return "imageScatteredClouds"
+            return "imageScatteredCloudsNight"
         case .showerRain, .rain, .lightRain, .moderateRain, .heavyIntensityRain, .veryHeavyRain, .extremeRain, .heavyIntensityShowerRain, .lightIntensityShowerRain, .freezingRain, .raggedShowerRain, .drizzle, .lightIntensityDrizzle, .heavyIntensityDrizzle, .drizzleRain, .lightIntensityDrizzleRain, .heavyIntensityDrizzleRain, .showerRainAndDrizzle, .heavyShowerRainAndDrizzle, .showerDrizzle:
             return "imageRainNight"
         case .thunderstorm, .thunderstormWithLightRain, .thunderstormWithRain, .thunderstormWithHeavyRain, .lightThunderstorm, .heavyThunderstorm, .raggedThunderstorm, .thunderstormWithLightDrizzle, .thunderstormWithDrizzle, .thunderstormWithHeavyDrizzle:
