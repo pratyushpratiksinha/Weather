@@ -7,11 +7,13 @@
 
 import Foundation
 
+//MARK: - Configuration
 enum Configuration {
     enum Error: Swift.Error {
         case missingKey, invalidValue
     }
 
+    ///get value from configuration files
     static func value<T>(for key: ConfigurationKey) throws -> T where T: LosslessStringConvertible {
         guard let object = Bundle.main.object(forInfoDictionaryKey: key.rawValue) else {
             throw Error.missingKey

@@ -7,6 +7,8 @@
 
 import UIKit
 
+//MARK: - WeatherDescription
+///Description from api
 enum WeatherDescription: String {
     case clearSky = "clear sky"
     case fewClouds = "few clouds"
@@ -132,6 +134,8 @@ enum WeatherDescription: String {
     }
 }
 
+//MARK: - WeatherCondition
+///Condition from api
 enum WeatherCondition: String {
     case feelsLike = "feelsLike"
     case pressure = "pressure"

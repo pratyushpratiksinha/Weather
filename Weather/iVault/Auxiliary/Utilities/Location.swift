@@ -8,6 +8,14 @@
 import UIKit
 import CoreLocation
 
+//MARK: - LocationOperation
+///location operation checker
+enum LocationOperation {
+    case once
+    case none
+}
+
+//MARK: - LocationDelegate
 protocol LocationDelegate {
     func hasLocationPermission(onCompletion: (Bool) -> Void)
 }

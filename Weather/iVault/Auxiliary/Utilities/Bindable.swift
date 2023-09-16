@@ -7,6 +7,8 @@
 
 import Foundation
 
+//MARK: - Bindable
+///generic bindable class for observing values
 final class Bindable<T> {
     var value: T? {
         didSet {

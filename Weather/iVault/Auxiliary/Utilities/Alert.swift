@@ -9,6 +9,7 @@ import UIKit
 
 typealias AlertAction = (UIAlertAction) -> Void
 
+//MARK: - DisplayAlertDelegate
 protocol DisplayAlertDelegate {
     func displayAlert(title: String, message: String)
     func displayAlertWithAction(title: String?, message: String?, action: AlertAction?)

@@ -228,7 +228,7 @@ extension CityVC {
 }
 
 private extension CityVC {
-    private final func cityWeatherConfigureDataSource() -> CityWeatherDataSourceReturnType {
+    private func cityWeatherConfigureDataSource() -> CityWeatherDataSourceReturnType {
         let dataSource = CityWeatherDataSourceReturnType(collectionView: collectionView) { (collectionView, indexPath, model) -> UICollectionViewCell? in
             switch model {
             case .todayWeather(let model):
@@ -272,7 +272,7 @@ private extension CityVC {
         return dataSource
     }
     
-    final func cityWeatherUpdateSnapshot(animatingChange: Bool = false) {
+    private func cityWeatherUpdateSnapshot(animatingChange: Bool = false) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             var snapshot = NSDiffableDataSourceSnapshot<CityWeatherDataCollectionViewSection, CityWeatherDataCollectionViewItem>()

@@ -7,11 +7,13 @@
 
 import Foundation
 
+//MARK: - TemperatureScale
 enum TemperatureScale: String {
     case celsius = "celsius"
     case fahrenheit = "fahrenheit"
 }
 
+//MARK: - TemperatureScaleConversionDataSource
 protocol TemperatureScaleConversionDataSource {
     func convertCelsiusToFahrenheit(_ c: Double) -> Double
     func convertFahrenheitToCelsius(_ f: Double) -> Double

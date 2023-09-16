@@ -131,7 +131,7 @@ extension CityListVM {
         }
     }
     
-    private final func getWeather(for location: CLLocation, onCompletion: @escaping (Result<CityWeatherResponse, NetworkError>) -> Void) {
+    private func getWeather(for location: CLLocation, onCompletion: @escaping (Result<CityWeatherResponse, NetworkError>) -> Void) {
         request(with: GETWeatherDataURN(location: location), onCompletion: onCompletion)
     }
 }
@@ -160,7 +160,7 @@ extension CityListVM {
         }
     }
     
-    private final func getGeo(from zipCode: String, onCompletion: @escaping (Result<GeoResponse, NetworkError>) -> Void) {
+    private func getGeo(from zipCode: String, onCompletion: @escaping (Result<GeoResponse, NetworkError>) -> Void) {
         request(with: GETGeoDataURN(zip: zipCode), onCompletion: onCompletion)
     }
 }

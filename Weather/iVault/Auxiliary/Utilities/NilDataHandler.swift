@@ -7,6 +7,7 @@
 
 import UIKit
 
+//MARK: - HandleNilDataDelegate
 protocol HandleNilDataDelegate {
     func examineNilData(for tableView: UITableView, with arr: Array<AnyObject>)
 }

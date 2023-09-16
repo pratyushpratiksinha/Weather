@@ -7,6 +7,8 @@
 
 import Foundation
 
+//MARK: - ImageType
+///types of images
 enum ImageType: String {
     case png = ".png"
 }

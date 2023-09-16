@@ -63,7 +63,7 @@ extension CityVM {
         }
     }
     
-    private final func offlineWeatherForecastOperationOnTemperatureScaleModifiation(for city: CityTVCModel) {
+    private func offlineWeatherForecastOperationOnTemperatureScaleModifiation(for city: CityTVCModel) {
         DispatchQueue.global(qos: .userInteractive).async { [weak self] in
             guard let self = self else { return }
             var tempCityForecast = city.forecast
@@ -108,7 +108,7 @@ extension CityVM {
         }
     }
     
-    private final func weatherForecastOperation(for cityWeatherList: [CityWeatherForecastResponse.CityWeather]) {
+    private func weatherForecastOperation(for cityWeatherList: [CityWeatherForecastResponse.CityWeather]) {
         DispatchQueue.global(qos: .userInteractive).async { [weak self] in
             guard let self = self else { return }
             var tempCityForecast = [CityForecastWeatherDataCVCModel]()
@@ -159,7 +159,7 @@ extension CityVM {
         }
     }
     
-    private final func getWeatherForecast(for location: CLLocation, onCompletion: @escaping (Result<CityWeatherForecastResponse, NetworkError>) -> Void) {
+    private func getWeatherForecast(for location: CLLocation, onCompletion: @escaping (Result<CityWeatherForecastResponse, NetworkError>) -> Void) {
         request(with: GETWeatherForecastDataURN(location: location, count: 7), onCompletion: onCompletion)
     }
 }

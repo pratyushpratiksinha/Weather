@@ -7,9 +7,10 @@
 
 import Foundation
 
+//MARK: - AppIngredients
 struct AppIngredients {
     
-    /// Returns true if RELEASE mode is active
+    ///Returns true if RELEASE mode is active
     public static var isRelease: Bool {
         #if DEBUG
             return false

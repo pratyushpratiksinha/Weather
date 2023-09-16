@@ -7,6 +7,7 @@
 
 import UIKit
 
+//MARK: - PopoverOptionItem
 protocol PopoverOptionItem {
     var text: String { get }
     var isSelected: Bool { get set }
@@ -19,11 +20,13 @@ extension PopoverOptionItem {
     }
 }
 
+//MARK: - PopoverOptionItemListVCDelegate
 protocol PopoverOptionItemListVCDelegate: AnyObject {
     func optionItemListViewController(_ controller: PopoverOptionItemListVC, didSelectOptionItem item: PopoverOptionItem)
 }
 
-class PopoverOptionItemListVC: UIViewController {
+//MARK: - PopoverOptionItemListVC
+final class PopoverOptionItemListVC: UIViewController {
     var items = [[PopoverOptionItem]]() {
         didSet {
             calculateAndSetPreferredContentSize()

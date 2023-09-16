@@ -227,7 +227,7 @@ extension CityListVC: UITableViewDelegate {
 }
 
 private extension CityListVC {
-    private final func cityListConfigureDataSource() -> CityListDataSourceReturnType {
+    private func cityListConfigureDataSource() -> CityListDataSourceReturnType {
         let dataSource = CityListDataSourceReturnType(tableView: tableView) { (tableView, indexPath, model) -> UITableViewCell? in
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ReusableIdentifierTVC.CityTVC.rawValue, for: indexPath) as? CityTVC else {
                 return UITableViewCell()
@@ -268,18 +268,18 @@ extension CityListVC: UISearchBarDelegate {
 }
 
 extension CityListVC: HandleNilDataDelegate {
-    private final func inspectNilDataNilData(for tableView: UITableView, with arr: Array<AnyObject>) {
+    private func inspectNilDataNilData(for tableView: UITableView, with arr: Array<AnyObject>) {
         examineNilData(for: tableView, with: arr)
     }
 }
 
 extension CityListVC: LocationDelegate, CLLocationManagerDelegate {
 
-    private final func isLocationPermissionEnabled(onCompletion: (Bool) -> Void) {
+    private func isLocationPermissionEnabled(onCompletion: (Bool) -> Void) {
         hasLocationPermission(onCompletion: onCompletion)
     }
 
-    private final func getCityList() {
+    private func getCityList() {
         viewModel.getCDCityListRecords { [weak self] (isDataAvailable) in
             guard let self = self else { return }
             if isDataAvailable == false {
@@ -293,7 +293,7 @@ extension CityListVC: LocationDelegate, CLLocationManagerDelegate {
         }
     }
     
-    private final func requestLocation() {
+    private func requestLocation() {
         DispatchQueue.global().async { [weak self] in
             guard let self = self else { return }
             self.isLocationPermissionEnabled { isEnabled in
@@ -333,14 +333,14 @@ extension CityListVC: LocationDelegate, CLLocationManagerDelegate {
 }
 
 extension CityListVC: DisplayAlertDelegate {
-    private final func showAlert(title: String, message: String) {
+    private func showAlert(title: String, message: String) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.displayAlert(title: title, message: message)
         }
     }
     
-    private final func showAlertWithGoToSettingsAction(title: String, message: String) {
+    private func showAlertWithGoToSettingsAction(title: String, message: String) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.displayAlertWithGoToSettingsAction(title: title, message: message)
@@ -349,14 +349,14 @@ extension CityListVC: DisplayAlertDelegate {
 }
 
 extension CityListVC: DisplayLoaderDelegate {
-    private final func startLoaderAnimation() {
+    private func startLoaderAnimation() {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.showLoadingView()
         }
     }
     
-    private final func stopLoaderAnimation() {
+    private func stopLoaderAnimation() {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.hideLoadingView()

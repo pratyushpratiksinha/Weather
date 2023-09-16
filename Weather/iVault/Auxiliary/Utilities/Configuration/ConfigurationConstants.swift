@@ -7,6 +7,8 @@
 
 import Foundation
 
+//MARK: - ConfigurationKey
+///keys to retrieve from configuration files
 enum ConfigurationKey: String {
     case baseURL = "API_BASE_URL"
     case appId = "API_KEY"

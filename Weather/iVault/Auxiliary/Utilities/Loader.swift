@@ -7,10 +7,12 @@
 
 import UIKit
 
+//MARK: - LoaderDisplayingConstants
 fileprivate struct LoaderDisplayingConstants {
     fileprivate static let loadingView = "LoaderDisplayingLoadingView"
 }
 
+//MARK: - DisplayLoaderDelegate
 protocol DisplayLoaderDelegate {
     func showLoadingView()
     func hideLoadingView()
@@ -41,6 +43,7 @@ extension DisplayLoaderDelegate where Self: UIViewController {
     }
 }
 
+//MARK: - LoadingView
 final class LoadingView: UIView {
     private let activityIndicatorView = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.medium)
     
@@ -60,7 +63,7 @@ final class LoadingView: UIView {
         }
     }
     
-    public func animate() {
+    public final func animate() {
         activityIndicatorView.startAnimating()
     }
 }
