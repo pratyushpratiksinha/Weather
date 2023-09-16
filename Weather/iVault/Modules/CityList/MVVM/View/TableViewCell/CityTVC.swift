@@ -163,7 +163,7 @@ class CityTVC: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setup(for model: CityTVCModel) {
+    final func setup(for model: CityTVCModel) {
         self.cityNameLabel.text = model.cityName
         self.countryNameLabel.text = model.countryName
         self.weatherDescriptionLabel.text = model.weatherDescription.capitalized

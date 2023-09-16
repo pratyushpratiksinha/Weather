@@ -8,7 +8,7 @@
 import Foundation
 import CoreLocation
 
-class CityVM: APIServiceProvider, TemperatureScaleConversionDataSource, DateTimeDataSource {
+final class CityVM: APIServiceProvider, TemperatureScaleConversionDataSource, DateTimeDataSource {
     private(set) lazy var cityForecast = Bindable<[CityForecastWeatherDataCVCModel]>()
     private(set) lazy var cityCondition = Bindable<[CityConditionWeatherDataCVCModel]>()
     private(set) lazy var error = Bindable<NetworkError>()
@@ -62,7 +62,6 @@ extension CityVM {
             }
         }
     }
-    
     
     private final func offlineWeatherForecastOperationOnTemperatureScaleModifiation(for city: CityTVCModel) {
         DispatchQueue.global(qos: .userInteractive).async { [weak self] in

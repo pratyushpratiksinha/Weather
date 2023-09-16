@@ -8,7 +8,7 @@
 import Foundation
 import CoreLocation
 
-class CityListVM: APIServiceProvider, TemperatureScaleConversionDataSource {
+final class CityListVM: APIServiceProvider, TemperatureScaleConversionDataSource {
     private(set) lazy var cityList = Bindable<[CityTVCModel]>()
     private(set) lazy var availableObjCity = Bindable<CityTVCModel>()
     private(set) lazy var alert = Bindable<(String, String)>()

@@ -102,7 +102,7 @@ class CityForecastWeatherDataCVC: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setup(for model: CityForecastWeatherDataCVCModel) {
+    final func setup(for model: CityForecastWeatherDataCVCModel) {
         self.dayLabel.text = model.day
         self.iconImageView.loadImageUsingCacheWithURLString(model.icon, placeHolder: nil)
         self.temperatureHighLowLabel.text = "H:\(Int(model.temperatureHigh))°  L:\(Int(model.temperatureLow))°"

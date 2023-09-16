@@ -84,7 +84,7 @@ class CityConditionWeatherDataCVC: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
      
-    func setup(for model: CityConditionWeatherDataCVCModel) {
+    final func setup(for model: CityConditionWeatherDataCVCModel) {
         self.titleLabel.text = model.title
         self.messageLabel.text = model.message
     }

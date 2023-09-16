@@ -124,7 +124,7 @@ class CityTodayWeatherDataCVC: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setup(for model: CityTodayWeatherDataCVCModel) {
+    final func setup(for model: CityTodayWeatherDataCVCModel) {
         self.cityNameLabel.text = model.cityName
         self.weatherDescriptionLabel.text = model.weatherDescription.capitalized
         self.temperatureCurrentLabel.text = "\(Int(model.temperatureCurrent))°"

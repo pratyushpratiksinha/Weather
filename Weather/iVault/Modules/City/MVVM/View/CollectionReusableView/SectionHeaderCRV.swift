@@ -62,7 +62,7 @@ class SectionHeaderCRV: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
      
-    func setup(for model: SectionHeaderCRVModel) {
+    final func setup(for model: SectionHeaderCRVModel) {
         self.titleLabel.text = model.title
     }
 }
