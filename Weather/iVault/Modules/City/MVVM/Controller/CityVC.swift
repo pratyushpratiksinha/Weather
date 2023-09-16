@@ -82,7 +82,6 @@ class CityVC: UIViewController {
     private var temperatureScale: TemperatureScale = .celsius
     private var delegate: CityDetailTopBarDelegate?
     private var cityData: CityTVCModel?
-    private var isCityObjectAlreadyAvailableInList = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -108,11 +107,10 @@ extension CityVC: UIGestureRecognizerDelegate {
 }
 
 extension CityVC {
-    final func set(delegate: CityDetailTopBarDelegate? = nil, cityData: CityTVCModel?, temperatureScale: TemperatureScale, isCityObjectAlreadyAvailableInList: Bool? = false) {
+    final func set(delegate: CityDetailTopBarDelegate? = nil, cityData: CityTVCModel?, temperatureScale: TemperatureScale) {
         self.delegate = delegate
         self.cityData = cityData
         self.temperatureScale = temperatureScale
-        self.isCityObjectAlreadyAvailableInList = isCityObjectAlreadyAvailableInList ?? false
     }
 }
 
@@ -164,7 +162,7 @@ private extension CityVC {
                 addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             ])
             addButton.addTarget(self, action: #selector(addButtonCTA), for: .touchUpInside)
-            addButton.isHidden = isCityObjectAlreadyAvailableInList
+            addButton.isHidden = delegate == nil
         }
     }
     

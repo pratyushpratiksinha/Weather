@@ -165,7 +165,7 @@ private extension CityListVC {
                 self.stopLoaderAnimation()
                 
                 let cityVC = CityVC()
-                cityVC.set(delegate: self, cityData: value, temperatureScale: self.viewModel.temperatureScale, isCityObjectAlreadyAvailableInList: true)
+                cityVC.set(cityData: value, temperatureScale: self.viewModel.temperatureScale)
                 if let sheet = cityVC.sheetPresentationController {
                     sheet.detents = [.large()]
                     sheet.largestUndimmedDetentIdentifier = .medium
