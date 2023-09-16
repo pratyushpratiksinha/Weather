@@ -5,6 +5,7 @@ The Weather Project is a user-friendly mobile application that provides real-tim
 ## Table of Contents
 
 - [Features](#features)
+- [Screenshots](#screenshots)
 - [Requirements](#requirements)
 - [Technologies Used](#technologies-used)
 - [Installation](#installation)
@@ -20,6 +21,12 @@ The Weather Project is a user-friendly mobile application that provides real-tim
 - **Multiple Locations:** Easily save and switch between different locations to check the weather anywhere in the world.
 - **Search Functionality:** Search for a location by postal code.
 - **Customization:** Personalize your weather app experience by setting your preferred units (Celsius or Fahrenheit).
+
+## Screenshots
+
+| List of cities | City details |
+|--------------|-------------|
+|![List of cities](https://github.com/pratyushpratik/Weather/assets/17877604/eee76ef2-ba77-4e2a-803a-d2ff310ba532)|![City details](https://github.com/pratyushpratik/Weather/assets/17877604/936c8282-78ba-4027-a863-f12bc48a1a84)|
   
 ## Requirements
 
