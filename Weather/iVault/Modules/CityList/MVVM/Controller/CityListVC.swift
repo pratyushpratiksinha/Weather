@@ -345,7 +345,6 @@ extension CityListVC: LocationDelegate, CLLocationManagerDelegate {
         locationManager.stopUpdatingLocation()
         if locationOperation == .once {
             guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
-            print("locations = \(locValue.latitude) \(locValue.longitude)")
             self.elementOperation = .currentLocationCreated
             self.getWeather(for: CLLocation(latitude: locValue.latitude, longitude: locValue.longitude))
             self.locationOperation = .none
@@ -353,7 +352,7 @@ extension CityListVC: LocationDelegate, CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print(error)
+        //
     }
 }
 

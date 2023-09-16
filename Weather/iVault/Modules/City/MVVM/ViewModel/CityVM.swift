@@ -35,7 +35,6 @@ extension CityVM {
             guard let self = self else { return }
             switch result {
             case .success(let forecast):
-                print(forecast)
                 DispatchQueue.global(qos: .userInteractive).async {
                     if let cityWeatherList = forecast.list {
                         var tempCityForecast = [CityForecastWeatherDataCVCModel]()

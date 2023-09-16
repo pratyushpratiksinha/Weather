@@ -40,8 +40,8 @@ final class PersistentStorage {
         do {
             guard let result = try PersistentStorage.shared.context.fetch(managedObject.fetchRequest()) as? [T] else {return nil}
             return result
-        } catch let error {
-            debugPrint(error)
+        } catch {
+            //
         }
         return nil
     }

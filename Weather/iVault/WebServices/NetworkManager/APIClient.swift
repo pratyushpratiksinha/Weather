@@ -21,13 +21,11 @@ final class APIClient {
             }
             
             let url = urnData.baseURL.rawValue + urnData.endPoint.rawValue
-            print("\n\n url ====>>>>>> \(url)")
             var urlComponents = URLComponents(string: url)!
             urlComponents.queryItems = urnData.urlQueryItems
             var request = URLRequest(url: urlComponents.url!)
             request.httpMethod = urnData.method.rawValue
             request.allHTTPHeaderFields = urnData.headers
-            print("\n\n request ====>>>>>> \(request)")
 
             let sessionConfig = URLSessionConfiguration.default
             sessionConfig.timeoutIntervalForRequest = 20.0
@@ -47,7 +45,6 @@ final class APIClient {
                 }
                 
                 let statusCode = httpResponse.statusCode
-                print("\n\n statusCode ====>>>>>> \(statusCode)")
                 switch statusCode {
                     
                 //predefined faliure cases
