@@ -8,25 +8,7 @@
 import UIKit
 import CoreLocation
 
-fileprivate enum ElementOperation {
-    case created
-    case deleted
-    case updated
-    case currentLocationCreated
-    case none
-}
-
-fileprivate enum CoreDataModel {
-    case existing
-    case notExisting
-}
-
-fileprivate enum LocationOperation {
-    case once
-    case none
-}
-
-fileprivate struct TemperatureScaleOptionItem: PopoverOptionItem {
+struct TemperatureScaleOptionItem: PopoverOptionItem {
     var text: String
     var isSelected: Bool
     var font = UIFont.systemFont(ofSize: 14, weight: .medium)
@@ -69,7 +51,7 @@ class CityListVC: UIViewController {
 
     private var celsiusItem: TemperatureScaleOptionItem?
     private var fahrenheitItem: TemperatureScaleOptionItem?
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -85,12 +67,12 @@ class CityListVC: UIViewController {
 }
 
 private extension CityListVC {
-    func setupUI() {
+    final func setupUI() {
         setupTableView()
         setupPopoverItems()
     }
     
-    func setupNavigationBar() {
+    final func setupNavigationBar() {
         navigationItem.title = "CityListVC.NavigationItem.Title".localized
         navigationController?.navigationBar.prefersLargeTitles = true
         let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
@@ -110,7 +92,7 @@ private extension CityListVC {
         }
     }
     
-    func presentOptionsPopover(withOptionItems items: [[PopoverOptionItem]], fromBarButtonItem barButtonItem: UIBarButtonItem) {
+    final func presentOptionsPopover(withOptionItems items: [[PopoverOptionItem]], fromBarButtonItem barButtonItem: UIBarButtonItem) {
         let optionItemListVC = PopoverOptionItemListVC()
         optionItemListVC.items = items
         optionItemListVC.delegate = self
@@ -121,7 +103,7 @@ private extension CityListVC {
         self.present(optionItemListVC, animated: true, completion: nil)
     }
     
-    func setupTableView() {
+    final func setupTableView() {
         view.addSubview(tableView)
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -138,8 +120,9 @@ private extension CityListVC {
 
 private extension CityListVC {
     
-    func setupPopoverItems() {
+    final func setupPopoverItems() {
         if let scale = viewModel.getTemperatureScaleFromUserDefaults() {
+            viewModel.setTemperatureScaleInUserDefaults(scale)
             celsiusItem = TemperatureScaleOptionItem(text: "CityVC.Popover.CelsiusItem.Title".localized, isSelected: scale == .celsius)
             fahrenheitItem = TemperatureScaleOptionItem(text: "CityVC.Popover.FahrenheitItem.Title".localized, isSelected: scale == .fahrenheit)
         } else {
@@ -149,7 +132,7 @@ private extension CityListVC {
         }
     }
     
-    func setupBinding() {
+    final func setupBinding() {
         viewModel.cityList.bind { [weak self] (value) in
             guard let self = self else { return }
             if self.coreDataModel == .existing ||
@@ -161,9 +144,7 @@ private extension CityListVC {
                     self.stopLoaderAnimation()
                     
                     let cityVC = CityVC()
-                    cityVC.temperatureScale = self.viewModel.temperatureScale
-                    cityVC.cityData = value?.last
-                    cityVC.delegate = self
+                    cityVC.set(delegate: self, cityData: value?.last, temperatureScale: self.viewModel.temperatureScale)
                     if let sheet = cityVC.sheetPresentationController {
                         sheet.detents = [.large()]
                         sheet.largestUndimmedDetentIdentifier = .medium
@@ -184,10 +165,7 @@ private extension CityListVC {
                 self.stopLoaderAnimation()
                 
                 let cityVC = CityVC()
-                cityVC.temperatureScale = self.viewModel.temperatureScale
-                cityVC.cityData = value
-                cityVC.delegate = self
-                cityVC.isCityObjectAlreadyAvailableInList = true
+                cityVC.set(delegate: self, cityData: value, temperatureScale: self.viewModel.temperatureScale, isCityObjectAlreadyAvailableInList: true)
                 if let sheet = cityVC.sheetPresentationController {
                     sheet.detents = [.large()]
                     sheet.largestUndimmedDetentIdentifier = .medium
@@ -214,7 +192,7 @@ private extension CityListVC {
         }
     }
     
-    func getWeather(for location: CLLocation) {
+    final func getWeather(for location: CLLocation) {
         DispatchQueue.global(qos: .background).async { [weak self] in
             guard let self = self else { return }
             self.startLoaderAnimation()
@@ -228,8 +206,7 @@ extension CityListVC: UITableViewDelegate {
         if let value = viewModel.cityList.value {
             if indexPath.row <= value.count - 1 {
                 let cityVC = CityVC()
-                cityVC.temperatureScale = viewModel.temperatureScale
-                cityVC.cityData = value[indexPath.row]
+                cityVC.set(cityData: value[indexPath.row], temperatureScale: self.viewModel.temperatureScale)
                 self.navigationController?.pushViewController(cityVC, animated: false)
             }
         }
@@ -250,7 +227,7 @@ extension CityListVC: UITableViewDelegate {
 }
 
 private extension CityListVC {
-    private func cityListConfigureDataSource() -> CityListDataSourceReturnType {
+    private final func cityListConfigureDataSource() -> CityListDataSourceReturnType {
         let dataSource = CityListDataSourceReturnType(tableView: tableView) { (tableView, indexPath, model) -> UITableViewCell? in
             guard let cell = tableView.dequeueReusableCell(withIdentifier: ReusableIdentifierTVC.CityTVC.rawValue, for: indexPath) as? CityTVC else {
                 return UITableViewCell()
@@ -261,7 +238,7 @@ private extension CityListVC {
         return dataSource
     }
     
-    func cityListUpdateSnapshot(animatingChange: Bool = false) {
+    final func cityListUpdateSnapshot(animatingChange: Bool = false) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.inspectNilDataNilData(for: self.tableView, with: (self.viewModel.cityList.value ?? []) as Array<AnyObject>)
@@ -279,7 +256,7 @@ private extension CityListVC {
 extension CityListVC: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
-        if (viewModel.cityList.value?.count ?? 0) <= 10 {
+        if (viewModel.cityList.value?.count ?? 0) < 10 {
             if let text = searchBar.text {
                 startLoaderAnimation()
                 viewModel.fireAPIGETGeo(from: text)
@@ -291,19 +268,18 @@ extension CityListVC: UISearchBarDelegate {
 }
 
 extension CityListVC: HandleNilDataDelegate {
-    private func inspectNilDataNilData(for tableView: UITableView, with arr: Array<AnyObject>) {
+    private final func inspectNilDataNilData(for tableView: UITableView, with arr: Array<AnyObject>) {
         examineNilData(for: tableView, with: arr)
     }
 }
 
 extension CityListVC: LocationDelegate, CLLocationManagerDelegate {
 
-    private func isLocationPermissionEnabled(onCompletion: (Bool) -> Void) {
+    private final func isLocationPermissionEnabled(onCompletion: (Bool) -> Void) {
         hasLocationPermission(onCompletion: onCompletion)
     }
 
-    private func getCityList() {
-        
+    private final func getCityList() {
         viewModel.getCDCityListRecords { [weak self] (isDataAvailable) in
             guard let self = self else { return }
             if isDataAvailable == false {
@@ -317,7 +293,7 @@ extension CityListVC: LocationDelegate, CLLocationManagerDelegate {
         }
     }
     
-    private func requestLocation() {
+    private final func requestLocation() {
         DispatchQueue.global().async { [weak self] in
             guard let self = self else { return }
             self.isLocationPermissionEnabled { isEnabled in
@@ -345,9 +321,9 @@ extension CityListVC: LocationDelegate, CLLocationManagerDelegate {
         locationManager.stopUpdatingLocation()
         if locationOperation == .once {
             guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
-            self.elementOperation = .currentLocationCreated
-            self.getWeather(for: CLLocation(latitude: locValue.latitude, longitude: locValue.longitude))
-            self.locationOperation = .none
+            elementOperation = .currentLocationCreated
+            getWeather(for: CLLocation(latitude: locValue.latitude, longitude: locValue.longitude))
+            locationOperation = .none
         }
     }
     
@@ -357,14 +333,14 @@ extension CityListVC: LocationDelegate, CLLocationManagerDelegate {
 }
 
 extension CityListVC: DisplayAlertDelegate {
-    private func showAlert(title: String, message: String) {
+    private final func showAlert(title: String, message: String) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.displayAlert(title: title, message: message)
         }
     }
     
-    private func showAlertWithGoToSettingsAction(title: String, message: String) {
+    private final func showAlertWithGoToSettingsAction(title: String, message: String) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.displayAlertWithGoToSettingsAction(title: title, message: message)
@@ -373,14 +349,14 @@ extension CityListVC: DisplayAlertDelegate {
 }
 
 extension CityListVC: DisplayLoaderDelegate {
-    private func startLoaderAnimation() {
+    private final func startLoaderAnimation() {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.showLoadingView()
         }
     }
     
-    private func stopLoaderAnimation() {
+    private final func stopLoaderAnimation() {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.hideLoadingView()
@@ -402,31 +378,14 @@ extension CityListVC: CityDetailTopBarDelegate {
     }
 }
 
+
+
 extension CityListVC: UIPopoverPresentationControllerDelegate, PopoverOptionItemListVCDelegate {
     func optionItemListViewController(_ controller: PopoverOptionItemListVC, didSelectOptionItem item: PopoverOptionItem) {
-        if let item = item as? TemperatureScaleOptionItem {
-            switch item.text {
-            case fahrenheitItem?.text:
-                if viewModel.temperatureScale == .fahrenheit {
-                    return
-                } else {
-                    viewModel.setTemperatureScaleInUserDefaults(.fahrenheit)
-                    setupPopoverItems()
-                    elementOperation = .updated
-                    viewModel.displayConvertedTemperature(temperatureScale: .fahrenheit)
-                }
-            case celsiusItem?.text:
-                if viewModel.temperatureScale == .celsius {
-                    return
-                } else {
-                    viewModel.setTemperatureScaleInUserDefaults(.celsius)
-                    setupPopoverItems()
-                    elementOperation = .updated
-                    viewModel.displayConvertedTemperature(temperatureScale: .celsius)
-                }
-            default:
-                return
-            }
+        viewModel.optionItemList(didSelectOptionItem: item) { [weak self] (elementOperation) in
+            guard let self = self else { return }
+            self.setupPopoverItems()
+            self.elementOperation = elementOperation
         }
         controller.dismiss(animated: false)
     }

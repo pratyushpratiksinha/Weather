@@ -24,6 +24,10 @@ extension CityListVM {
         temperatureScale = scale
     }
     
+    final func setTemperatureScale(isModified: Bool) {
+        UserDefaults.isTemperatureScaleModified = isModified
+    }
+    
     final func getTemperatureScaleFromUserDefaults() -> TemperatureScale? {
         if let scale = TemperatureScale(rawValue: UserDefaults.temperatureScale ?? "") {
             return scale
@@ -127,7 +131,7 @@ extension CityListVM {
         }
     }
     
-    private func getWeather(for location: CLLocation, onCompletion: @escaping (Result<CityWeatherResponse, NetworkError>) -> Void) {
+    private final func getWeather(for location: CLLocation, onCompletion: @escaping (Result<CityWeatherResponse, NetworkError>) -> Void) {
         request(with: GETWeatherDataURN(location: location), onCompletion: onCompletion)
     }
 }
@@ -156,7 +160,36 @@ extension CityListVM {
         }
     }
     
-    private func getGeo(from zipCode: String, onCompletion: @escaping (Result<GeoResponse, NetworkError>) -> Void) {
+    private final func getGeo(from zipCode: String, onCompletion: @escaping (Result<GeoResponse, NetworkError>) -> Void) {
         request(with: GETGeoDataURN(zip: zipCode), onCompletion: onCompletion)
+    }
+}
+
+extension CityListVM {
+    final func optionItemList(didSelectOptionItem item: PopoverOptionItem, onCompletion: (ElementOperation) -> Void) {
+        if let item = item as? TemperatureScaleOptionItem {
+            switch item.text {
+            case "CityVC.Popover.FahrenheitItem.Title".localized:
+                if temperatureScale == .fahrenheit {
+                    return
+                } else {
+                    setTemperatureScale(isModified: true)
+                    setTemperatureScaleInUserDefaults(.fahrenheit)
+                    onCompletion(.updated)
+                    displayConvertedTemperature(temperatureScale: .fahrenheit)
+                }
+            case "CityVC.Popover.CelsiusItem.Title".localized:
+                if temperatureScale == .celsius {
+                    return
+                } else {
+                    setTemperatureScale(isModified: true)
+                    setTemperatureScaleInUserDefaults(.celsius)
+                    onCompletion(.updated)
+                    displayConvertedTemperature(temperatureScale: .celsius)
+                }
+            default:
+                return
+            }
+        }
     }
 }

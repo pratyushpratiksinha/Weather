@@ -50,4 +50,7 @@ extension UserDefaults {
 
     @UserDefault(key: UserDefaultsKeys.temperatureScale.rawValue)
     static var temperatureScale: String?
+    
+    @UserDefault(key: UserDefaultsKeys.isTemperatureScaleModified.rawValue, defaultValue: false)
+    static var isTemperatureScaleModified: Bool?
 }

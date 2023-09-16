@@ -81,10 +81,10 @@ class CityVC: UIViewController {
     
     private lazy var cityWeatherDataSource = cityWeatherConfigureDataSource()
 
-    var temperatureScale: TemperatureScale = .celsius
-    var delegate: CityDetailTopBarDelegate?
-    var cityData: CityTVCModel?
-    var isCityObjectAlreadyAvailableInList = false
+    private var temperatureScale: TemperatureScale = .celsius
+    private var delegate: CityDetailTopBarDelegate?
+    private var cityData: CityTVCModel?
+    private var isCityObjectAlreadyAvailableInList = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -109,15 +109,24 @@ extension CityVC: UIGestureRecognizerDelegate {
     }
 }
 
+extension CityVC {
+    final func set(delegate: CityDetailTopBarDelegate? = nil, cityData: CityTVCModel?, temperatureScale: TemperatureScale, isCityObjectAlreadyAvailableInList: Bool? = false) {
+        self.delegate = delegate
+        self.cityData = cityData
+        self.temperatureScale = temperatureScale
+        self.isCityObjectAlreadyAvailableInList = isCityObjectAlreadyAvailableInList ?? false
+    }
+}
+
 private extension CityVC {
-    func setupUI() {
+    final func setupUI() {
         setupView()
         setupBackgroundImage()
         setupTopBar()
         setupCollectionView()
     }
     
-    func setupNavigationBar() {
+    final func setupNavigationBar() {
         navigationController?.navigationBar.tintColor = .white
         navigationController?.navigationBar.prefersLargeTitles = false
         let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
@@ -128,11 +137,11 @@ private extension CityVC {
         navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
-    func setupView() {
+    final func setupView() {
         view.backgroundColor = UIColor("#89CFF0")
     }
     
-    func setupTopBar() {
+    final func setupTopBar() {
         if self.isBeingPresented {
             view.addSubview(topBarView)
             NSLayoutConstraint.activate([
@@ -161,7 +170,7 @@ private extension CityVC {
         }
     }
     
-    func setupBackgroundImage() {
+    final func setupBackgroundImage() {
         if let backgroundImage = cityData?.backgroundImage {
             view.addSubview(backgroundImageView)
             NSLayoutConstraint.activate([
@@ -174,7 +183,7 @@ private extension CityVC {
         }
     }
     
-    func setupCollectionView() {
+    final func setupCollectionView() {
         view.addSubview(collectionView)
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: self.isBeingPresented ? 64 : 16),
@@ -204,7 +213,7 @@ private extension CityVC {
 }
 
 extension CityVC {
-    func setupBinding() {
+    final func setupBinding() {
         viewModel.setTemperatureScale(temperatureScale)
         
         if let city = cityData {
@@ -219,7 +228,7 @@ extension CityVC {
 }
 
 private extension CityVC {
-    private func cityWeatherConfigureDataSource() -> CityWeatherDataSourceReturnType {
+    private final func cityWeatherConfigureDataSource() -> CityWeatherDataSourceReturnType {
         let dataSource = CityWeatherDataSourceReturnType(collectionView: collectionView) { (collectionView, indexPath, model) -> UICollectionViewCell? in
             switch model {
             case .todayWeather(let model):
@@ -263,7 +272,7 @@ private extension CityVC {
         return dataSource
     }
     
-    func cityWeatherUpdateSnapshot(animatingChange: Bool = false) {
+    final func cityWeatherUpdateSnapshot(animatingChange: Bool = false) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             var snapshot = NSDiffableDataSourceSnapshot<CityWeatherDataCollectionViewSection, CityWeatherDataCollectionViewItem>()
@@ -314,7 +323,7 @@ extension CityVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 }
 
 extension CityVC {
-    func fireForecastAPI() {
+    final func fireForecastAPI() {
         if let latitude = cityData?.location.coordinate.latitude,
            let longitude = cityData?.location.coordinate.longitude {
             viewModel.fireAPIGETWeatherForecast(for: CLLocation(latitude: latitude, longitude: longitude))

@@ -10,7 +10,7 @@ import UIKit
 struct CityConditionWeatherDataCVCModel: Hashable {
     let id: Int
     let title: String
-    let message: String
+    var message: String
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(title)

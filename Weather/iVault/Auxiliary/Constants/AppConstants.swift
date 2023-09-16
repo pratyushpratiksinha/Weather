@@ -23,4 +23,23 @@ enum ReusableIdentifierCRV: String {
 
 enum UserDefaultsKeys: String {
     case temperatureScale = "temperatureScale"
+    case isTemperatureScaleModified = "isTemperatureScaleModified"
+}
+
+enum ElementOperation {
+    case created
+    case deleted
+    case updated
+    case currentLocationCreated
+    case none
+}
+
+enum CoreDataModel {
+    case existing
+    case notExisting
+}
+
+enum LocationOperation {
+    case once
+    case none
 }
