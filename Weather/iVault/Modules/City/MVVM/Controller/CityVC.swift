@@ -245,11 +245,11 @@ private extension CityVC {
             }
             switch indexPath.section {
             case 0:
-                header.setup(for: SectionHeaderCRVModel.init(title: ""))
+                header.setup(for: SectionHeaderCRVModel(title: ""))
             case 1:
-                header.setup(for: SectionHeaderCRVModel.init(title: "CityVC.CollectionView.Section.Header.Forecast.Title".localized))
+                header.setup(for: SectionHeaderCRVModel(title: "CityVC.CollectionView.Section.Header.Forecast.Title".localized))
             case 2:
-                header.setup(for: SectionHeaderCRVModel.init(title: "CityVC.CollectionView.Section.Header.Condition.Title".localized))
+                header.setup(for: SectionHeaderCRVModel(title: "CityVC.CollectionView.Section.Header.Condition.Title".localized))
             default:
                 return UICollectionReusableView()
             }

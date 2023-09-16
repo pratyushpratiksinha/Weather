@@ -18,6 +18,8 @@ struct CityTVCModel: Hashable {
     var temperatureHigh: Double
     var temperatureLow: Double
     var location: CLLocation
+    var forecast: [CityForecastWeatherDataCVCModel]?
+    var condition: [CityConditionWeatherDataCVCModel]?
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)

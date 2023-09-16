@@ -11,14 +11,31 @@ import CoreLocation
 class CityListVM: APIServiceProvider, TemperatureScaleConversionDataSource {
     private(set) lazy var cityList = Bindable<[CityTVCModel]>()
     private(set) lazy var availableObjCity = Bindable<CityTVCModel>()
-    private(set) var alert = Bindable<(String, String)>()
-    private(set) var error = Bindable<NetworkError>()
+    private(set) lazy var alert = Bindable<(String, String)>()
+    private(set) lazy var error = Bindable<NetworkError>()
     private(set) var temperatureScale: TemperatureScale = .celsius
+    private var cdCityManager = CDCityManager()
 }
 
 extension CityListVM {
+    
+    final func getCDCityListRecords(onCompletion: @escaping (Bool) -> Void)  {
+        if let cityListRecords = cdCityManager.getAll(),
+           cityListRecords.count > 0 {
+            onCompletion(true)
+            cityList.value = cityListRecords
+        } else {
+            onCompletion(false)
+        }
+    }
+    
     final func deleteElement(fromCityListAt index: Int) {
-        self.cityList.value?.remove(at: index)
+        cdCityManager.delete(byIdentifier: self.cityList.value?[index].id ?? 0) { [weak self] (isCityRecordDeleted) in
+            guard let self = self else { return }
+            if isCityRecordDeleted {
+                self.cityList.value?.remove(at: index)
+            }
+        }
     }
     
     final func displayConvertedTemperature(temperatureScale: TemperatureScale) {
@@ -30,7 +47,12 @@ extension CityListVM {
                 tempCityListValue[index].temperatureHigh = temperatureScale == .fahrenheit ? convertCelsiusToFahrenheit(tempCityListValue[index].temperatureHigh) : convertFahrenheitToCelsius(tempCityListValue[index].temperatureHigh)
                 tempCityListValue[index].temperatureLow = temperatureScale == .fahrenheit ? convertCelsiusToFahrenheit(tempCityListValue[index].temperatureLow) : convertFahrenheitToCelsius(tempCityListValue[index].temperatureLow)
                 if index == value.count - 1 {
-                    cityList.value = tempCityListValue
+                    cdCityManager.update(records: tempCityListValue) { [weak self] (isCityRecordUpdated) in
+                        guard let self = self else { return }
+                        if isCityRecordUpdated {
+                            self.cityList.value = self.cdCityManager.getAll()
+                        }
+                    }
                 }
             }
         }
@@ -68,12 +90,20 @@ extension CityListVM {
                                                temperatureLow: self.temperatureScale == .celsius ? temperatureLowInCelcius : self.convertCelsiusToFahrenheit(temperatureLowInCelcius),
                                                location: CLLocation(latitude: city.coord.lat, longitude: city.coord.lon))
                     if self.cityList.value == nil {
-                        self.cityList.value = [element]
+                        self.cdCityManager.create(record: element) { isCreatedCityRecord in
+                            if isCreatedCityRecord {
+                                self.cityList.value = self.cdCityManager.getAll()
+                            }
+                        }
                     } else {
                         if let obj = self.cityList.value?.first(where: {$0.id == element.id}) {
                             self.availableObjCity.value = obj
                         } else {
-                            self.cityList.value?.append(element)
+                            self.cdCityManager.create(record: element) { isCreatedCityRecord in
+                                if isCreatedCityRecord {
+                                    self.cityList.value?.append(element)
+                                }
+                            }
                         }
                     }
                 }

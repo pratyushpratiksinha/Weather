@@ -16,6 +16,16 @@ fileprivate enum ElementOperation {
     case none
 }
 
+fileprivate enum CoreDataModel {
+    case existing
+    case notExisting
+}
+
+fileprivate enum LocationOperation {
+    case once
+    case none
+}
+
 fileprivate struct TemperatureScaleOptionItem: PopoverOptionItem {
     var text: String
     var isSelected: Bool
@@ -54,7 +64,9 @@ class CityListVC: UIViewController {
     
     private lazy var cityListDataSource = cityListConfigureDataSource()
     private var elementOperation: ElementOperation = .none
-    
+    private var locationOperation: LocationOperation = .none
+    private var coreDataModel: CoreDataModel?
+
     private var celsiusItem: TemperatureScaleOptionItem?
     private var fahrenheitItem: TemperatureScaleOptionItem?
 
@@ -63,9 +75,7 @@ class CityListVC: UIViewController {
         // Do any additional setup after loading the view.
         setupUI()
         setupBinding()
-        setupPopoverItems()
-        cityListUpdateSnapshot()
-        updateFirstItemWRTLocation()
+        getCityList()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -77,6 +87,7 @@ class CityListVC: UIViewController {
 private extension CityListVC {
     func setupUI() {
         setupTableView()
+        setupPopoverItems()
     }
     
     func setupNavigationBar() {
@@ -121,6 +132,7 @@ private extension CityListVC {
         tableView.delegate = self
         tableView.dataSource = cityListDataSource
         tableView.register(CityTVC.self, forCellReuseIdentifier: ReusableIdentifierTVC.CityTVC.rawValue)
+        inspectNilDataNilData(for: self.tableView, with: (self.viewModel.cityList.value ?? []) as Array<AnyObject>)
     }
 }
 
@@ -134,7 +146,11 @@ private extension CityListVC {
     func setupBinding() {
         viewModel.cityList.bind { [weak self] (value) in
             guard let self = self else { return }
-            if value?.isEmpty == false && self.elementOperation != .deleted && self.elementOperation != .updated && self.elementOperation != .currentLocationCreated {
+            if self.coreDataModel == .existing ||
+                self.elementOperation == .deleted ||
+                (value?.isEmpty == false && (self.elementOperation == .updated || self.elementOperation == .currentLocationCreated)) {
+                self.cityListUpdateSnapshot()
+            } else {
                 DispatchQueue.main.async {
                     self.stopLoaderAnimation()
                     
@@ -151,9 +167,8 @@ private extension CityListVC {
                     }
                     self.present(cityVC, animated: true)
                 }
-            } else {
-                self.cityListUpdateSnapshot()
             }
+            self.coreDataModel = .notExisting
             self.elementOperation = .none
         }
         
@@ -281,10 +296,19 @@ extension CityListVC: LocationDelegate, CLLocationManagerDelegate {
         hasLocationPermission(onCompletion: onCompletion)
     }
 
-    private func updateFirstItemWRTLocation() {
-        locationManager.delegate = self
-        locationManager.requestWhenInUseAuthorization()
-        requestLocation()
+    private func getCityList() {
+        
+        viewModel.getCDCityListRecords { [weak self] (isDataAvailable) in
+            guard let self = self else { return }
+            if isDataAvailable == false {
+                self.coreDataModel = .notExisting
+                self.locationManager.requestWhenInUseAuthorization()
+                self.locationManager.delegate = self
+                self.requestLocation()
+            } else {
+                self.coreDataModel = .existing
+            }
+        }
     }
     
     private func requestLocation() {
@@ -292,6 +316,7 @@ extension CityListVC: LocationDelegate, CLLocationManagerDelegate {
             guard let self = self else { return }
             self.isLocationPermissionEnabled { isEnabled in
                 if isEnabled {
+                    self.locationOperation = .once
                     self.locationManager.startUpdatingLocation()
                 } else {
                     self.showAlertWithGoToSettingsAction(title: "CityListVC.Alert.LocationPermission.Title".localized, message: "CityListVC.Alert.LocationPermission.Message".localized)
@@ -303,6 +328,7 @@ extension CityListVC: LocationDelegate, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         switch status {
         case .authorizedAlways, .authorizedWhenInUse:
+            locationOperation = .once
             locationManager.startUpdatingLocation()
         default:
             break
@@ -310,11 +336,14 @@ extension CityListVC: LocationDelegate, CLLocationManagerDelegate {
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
-        print("locations = \(locValue.latitude) \(locValue.longitude)")
-        self.elementOperation = .currentLocationCreated
-        self.getWeather(for: CLLocation(latitude: locValue.latitude, longitude: locValue.longitude))
         locationManager.stopUpdatingLocation()
+        if locationOperation == .once {
+            guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
+            print("locations = \(locValue.latitude) \(locValue.longitude)")
+            self.elementOperation = .currentLocationCreated
+            self.getWeather(for: CLLocation(latitude: locValue.latitude, longitude: locValue.longitude))
+            self.locationOperation = .none
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {

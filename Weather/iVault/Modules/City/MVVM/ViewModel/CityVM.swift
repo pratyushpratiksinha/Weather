@@ -11,7 +11,7 @@ import CoreLocation
 class CityVM: APIServiceProvider, TemperatureScaleConversionDataSource, DateTimeDataSource {
     private(set) lazy var cityForecast = Bindable<[CityForecastWeatherDataCVCModel]>()
     private(set) lazy var cityCondition = Bindable<[CityConditionWeatherDataCVCModel]>()
-    private(set) var error = Bindable<NetworkError>()
+    private(set) lazy var error = Bindable<NetworkError>()
     private(set) var temperatureScale: TemperatureScale = .celsius
 }
 
@@ -53,10 +53,10 @@ extension CityVM {
                                             if let value = value as? Double {
                                                 let feelsLikeInCelcius = self.convertKelvinToCelsius(value)
                                                 let temperatureScaleValue: String = "\(Int(self.temperatureScale == .celsius ? feelsLikeInCelcius : self.convertCelsiusToFahrenheit(feelsLikeInCelcius)))"
-                                                tempCityCondition.append(CityConditionWeatherDataCVCModel(title: condition.title, message: temperatureScaleValue))
+                                                tempCityCondition.append(CityConditionWeatherDataCVCModel(id: (cityWeatherList.first?.dt ?? 0), title: condition.title, message: temperatureScaleValue))
                                             }
                                         } else {
-                                            tempCityCondition.append(CityConditionWeatherDataCVCModel(title: condition.title, message: "\(String(describing: value ?? ""))"))
+                                            tempCityCondition.append(CityConditionWeatherDataCVCModel(id: (cityWeatherList.first?.dt ?? 0), title: condition.title, message: "\(String(describing: value ?? ""))"))
                                         }
                                     }
                                 }

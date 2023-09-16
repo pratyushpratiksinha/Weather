@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21513" systemVersion="21G646" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="CDCity" representedClassName="CDCity" syncable="YES">
+        <attribute name="backgroundImage" optional="YES" attributeType="String"/>
+        <attribute name="cityName" optional="YES" attributeType="String"/>
+        <attribute name="countryName" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="temperatureCurrent" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="temperatureHigh" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="temperatureLow" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="weatherDescription" optional="YES" attributeType="String"/>
+        <relationship name="toCondition" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDCityCondition" inverseName="toCity" inverseEntity="CDCityCondition"/>
+        <relationship name="toForecast" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="CDCityForecast" inverseName="toCity" inverseEntity="CDCityForecast"/>
+    </entity>
+    <entity name="CDCityCondition" representedClassName="CDCityCondition" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="message" optional="YES" attributeType="String"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <relationship name="toCity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDCity" inverseName="toCondition" inverseEntity="CDCity"/>
+    </entity>
+    <entity name="CDCityForecast" representedClassName="CDCityForecast" syncable="YES">
+        <attribute name="day" optional="YES" attributeType="String"/>
+        <attribute name="icon" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="temperatureHigh" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="temperatureLow" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="toCity" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDCity" inverseName="toForecast" inverseEntity="CDCity"/>
+    </entity>
+</model>
