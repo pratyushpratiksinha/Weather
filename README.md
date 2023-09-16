@@ -18,7 +18,7 @@ The Weather Project is a user-friendly mobile application that provides real-tim
 
 - **Current Weather:** Get up-to-date weather information for your current location or any location you specify.
 - **7-Day Forecast:** Check the weather forecast for the next seven days to prepare for the week ahead.
-- **Multiple Locations:** Easily save and switch between different locations to check the weather anywhere in the world.
+- **Multiple Locations:** Easily save and switch between different locations to check the weather anywhere in the world. You can store up to 10 cities in the list. You can remove the unessential city by left swiping.  
 - **Search Functionality:** Search for a location by postal code.
 - **Customization:** Personalize your weather app experience by setting your preferred units (Celsius or Fahrenheit).
 
@@ -42,8 +42,26 @@ To run the Weather Project application, you'll need:
 - **UIKit:** The UI framework for building iOS user interfaces.
 - **Core Location:** Used to access location data for weather information.
 - **Core Data:** Used to store and retrieve data for offline storage.
-- **API Integration:** We integrate with [Weather API Provider](https://openweathermap.org/api) free version to fetch weather data.
-
+- **API Integration:** We integrate with [Weather API Provider](https://openweathermap.org/api)(free version) to fetch weather data. So, the data might not be accurate in different API's because of the free version. Alternatively, you can test the response from the below API's(appid is available in configuration files inside the project):
+  
+1. Check Geo:
+   
+   ```
+   https://api.openweathermap.org/geo/1.0/zip?zip=Zipcode&appid=appid
+   ```
+   
+2. Get Weather:
+   
+   ```
+   https://api.openweathermap.org/data/2.5/weather?lat=latitude&lon=longitude&appid=appid
+   ```
+   
+3. Get Weather Forecast:
+   
+   ```
+   https://api.openweathermap.org/data/2.5/forecast?lat=latitude&lon=longitude&appid=appid&cnt=count
+   ```
+   
 ## Installation
 
 1. Clone the repository to your local machine:
