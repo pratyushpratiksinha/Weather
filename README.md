@@ -10,6 +10,7 @@ The Weather Project is a user-friendly mobile application that provides real-tim
 - [Technologies Used](#technologies-used)
 - [Installation](#installation)
 - [Usage](#usage)
+- [TestCase](#testcase)
 - [Contributing](#contributing)
 - [Roadmap](#roadmap)
 - [License](#license)
@@ -82,7 +83,11 @@ To run the Weather Project application, you'll need:
 
 1. Open Weather.xcodeproj file in Xcode.
 
-2. Build and run the project on the iOS Simulator or your physical device.     
+2. Build and run the project on the iOS Simulator or your physical device.
+
+## TestCase
+
+1. Unit/Integration test cases are written in WeatherTests folder.
 
 ## Contributing
 
