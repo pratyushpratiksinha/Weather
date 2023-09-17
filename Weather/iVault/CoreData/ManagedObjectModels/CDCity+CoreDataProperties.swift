@@ -22,6 +22,7 @@ extension CDCity {
     @NSManaged public var id: Int64
     @NSManaged public var latitude: Double
     @NSManaged public var longitude: Double
+    @NSManaged public var scale: String?
     @NSManaged public var temperatureCurrent: Double
     @NSManaged public var temperatureHigh: Double
     @NSManaged public var temperatureLow: Double

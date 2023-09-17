@@ -14,7 +14,6 @@ final class CityVM: TemperatureScaleConversionDataSource, DateTimeDataSource {
     private(set) lazy var error = Bindable<NetworkError>()
     private var cityData: CityTVCModel?
     private var temperatureScale: TemperatureScale = .celsius
-    private var isTemperatureScaleModified = false
     private var cdCityManager = CDCityManager()
     private let apiService: APIServiceProvider
     
@@ -31,11 +30,6 @@ extension CityVM {
     
     final func setTemperatureScale(_ scale: TemperatureScale) {
         self.temperatureScale = scale
-        self.isTemperatureScaleModified = UserDefaults.isTemperatureScaleModified ?? false
-    }
-    
-    final func setTemperatureScale(isModified: Bool) {
-        UserDefaults.isTemperatureScaleModified = isModified
     }
     
     final func setCityData(_ city: CityTVCModel) {
@@ -64,8 +58,7 @@ extension CityVM {
     private func offlineWeatherData() {
         if let cityData = self.cityData {
             self.cdCityManager.get(byIdentifier: cityData.id) { city in
-                if self.isTemperatureScaleModified {
-                    self.setTemperatureScale(isModified: false)
+                if city?.scale != self.temperatureScale.rawValue {
                     if let city = city {
                         self.offlineWeatherOperationOnTemperatureScaleModifiation(for: city)
                     }
@@ -87,8 +80,8 @@ extension CityVM {
                cityForecastList.count > 0 {
                 for index in 0..<cityForecastList.count {
                     var cityForecast = cityForecastList[index]
-                    cityForecast.temperatureHigh = self.temperatureScale == .celsius ? cityForecast.temperatureHigh : self.convertCelsiusToFahrenheit(cityForecast.temperatureHigh)
-                    cityForecast.temperatureLow = self.temperatureScale == .celsius ? cityForecast.temperatureLow : self.convertCelsiusToFahrenheit(cityForecast.temperatureLow)
+                    cityForecast.temperatureHigh = self.temperatureScale == .celsius ? (city.scale == "" ? cityForecast.temperatureHigh : self.convertFahrenheitToCelsius(cityForecast.temperatureHigh)) : self.convertCelsiusToFahrenheit(cityForecast.temperatureHigh)
+                    cityForecast.temperatureLow = self.temperatureScale == .celsius ? (city.scale == "" ? cityForecast.temperatureLow : self.convertFahrenheitToCelsius(cityForecast.temperatureLow)) : self.convertCelsiusToFahrenheit(cityForecast.temperatureLow)
                     tempCityForecast?[index] = cityForecast
                     if index == cityForecastList.count - 1 {
                         self.cityData?.forecast = tempCityForecast
@@ -107,9 +100,10 @@ extension CityVM {
                cityCondition.count > 0 {
                 for index in 0..<cityCondition.count where city.condition?[index].title == WeatherCondition.feelsLike.title {
                     guard let value = Double(city.condition?[index].message ?? "") else { return }
-                    let temperatureScaleValue: String = "\(Int(self.temperatureScale == .celsius ? value: self.convertCelsiusToFahrenheit(value)))"
+                    let temperatureScaleValue: String = "\(Int(self.temperatureScale == .celsius ? (city.scale == "" ? value : self.convertFahrenheitToCelsius(value)) : self.convertCelsiusToFahrenheit(value)))"
                     tempCityCondition?[index].message = temperatureScaleValue
                     self.cityData?.condition = tempCityCondition
+                    self.cityData?.scale = self.temperatureScale.rawValue
                     if let cityData = self.cityData {
                         self.cdCityManager.update(record: cityData) { (isCityRecordUpdated) in
                             if isCityRecordUpdated {
@@ -157,6 +151,7 @@ extension CityVM {
                 }
                 
                 if index == cityWeatherList.count - 1 {
+                    self.cityData?.scale = self.temperatureScale.rawValue
                     self.cityData?.condition = tempCityCondition
                     self.cityData?.forecast = tempCityForecast
                     if let cityData = self.cityData {

@@ -27,6 +27,7 @@ struct CityListRepository : CityListDataRepository {
             cdCity.temperatureLow = record.temperatureLow
             cdCity.latitude = record.location.coordinate.latitude
             cdCity.longitude = record.location.coordinate.longitude
+            cdCity.scale = record.scale
             if privateManagedContext.hasChanges {
                 try? privateManagedContext.save()
                 onCompletion(true)
@@ -67,7 +68,8 @@ struct CityListRepository : CityListDataRepository {
             city.temperatureLow = record.temperatureLow
             city.latitude = record.location.coordinate.latitude
             city.longitude = record.location.coordinate.longitude
-            
+            city.scale = record.scale
+
             if let forecastList = record.forecast,
                forecastList.count != 0 {
                 var forecastSet = Set<CDCityForecast>()

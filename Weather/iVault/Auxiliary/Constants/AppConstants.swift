@@ -31,7 +31,6 @@ enum ReusableIdentifierCRV: String {
 //keys for saving and retrieving from UserDefaults
 enum UserDefaultsKeys: String {
     case temperatureScale = "temperatureScale"
-    case isTemperatureScaleModified = "isTemperatureScaleModified"
 }
 
 //MARK: - ElementOperation

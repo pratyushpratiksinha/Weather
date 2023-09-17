@@ -29,10 +29,6 @@ extension CityListVM {
         temperatureScale = scale
     }
     
-    final func setTemperatureScale(isModified: Bool) {
-        UserDefaults.isTemperatureScaleModified = isModified
-    }
-    
     final func getTemperatureScaleFromUserDefaults() -> TemperatureScale? {
         if let scale = TemperatureScale(rawValue: UserDefaults.temperatureScale ?? "") {
             return scale
@@ -180,7 +176,6 @@ extension CityListVM {
                 if temperatureScale == .fahrenheit {
                     return
                 } else {
-                    setTemperatureScale(isModified: true)
                     setTemperatureScaleInUserDefaults(.fahrenheit)
                     onCompletion(.updated)
                     displayConvertedTemperature(temperatureScale: .fahrenheit)
@@ -189,7 +184,6 @@ extension CityListVM {
                 if temperatureScale == .celsius {
                     return
                 } else {
-                    setTemperatureScale(isModified: true)
                     setTemperatureScaleInUserDefaults(.celsius)
                     onCompletion(.updated)
                     displayConvertedTemperature(temperatureScale: .celsius)

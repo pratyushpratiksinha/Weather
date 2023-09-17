@@ -18,6 +18,7 @@ struct CityTVCModel: Hashable {
     var temperatureHigh: Double
     var temperatureLow: Double
     var location: CLLocation
+    var scale: String?
     var forecast: [CityForecastWeatherDataCVCModel]?
     var condition: [CityConditionWeatherDataCVCModel]?
     
@@ -27,7 +28,7 @@ struct CityTVCModel: Hashable {
     }
     
     static func == (lhs: CityTVCModel, rhs: CityTVCModel) -> Bool {
-        lhs.id == rhs.id && lhs.cityName == rhs.cityName && lhs.countryName == rhs.countryName && lhs.weatherDescription == rhs.weatherDescription && lhs.backgroundImage == rhs.backgroundImage && lhs.temperatureCurrent == rhs.temperatureCurrent && lhs.temperatureHigh == rhs.temperatureHigh && lhs.temperatureLow == rhs.temperatureLow
+        lhs.id == rhs.id && lhs.cityName == rhs.cityName && lhs.countryName == rhs.countryName && lhs.weatherDescription == rhs.weatherDescription && lhs.backgroundImage == rhs.backgroundImage && lhs.temperatureCurrent == rhs.temperatureCurrent && lhs.temperatureHigh == rhs.temperatureHigh && lhs.temperatureLow == rhs.temperatureLow && lhs.location == rhs.location && lhs.scale == rhs.scale && lhs.forecast == rhs.forecast  && lhs.condition == rhs.condition
     }
 }
 
