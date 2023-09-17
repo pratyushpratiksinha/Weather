@@ -46,13 +46,13 @@ extension CityVM {
 //handling weather API
 extension CityVM {
     
-    final func fireAPIGETWeatherForecast(for location: CLLocation) {
-        getWeatherForecast(for: location){ [weak self] (result) in
+    final func fireAPIGETWeatherForecast(for location: CLLocation, onCompletion: (() -> ())? = nil) {
+        getWeatherForecast(for: location) { [weak self] (result) in
             guard let self = self else { return }
             switch result {
             case .success(let forecast):
                 if let cityWeatherList = forecast.list {
-                    self.weatherForecastOperation(for: cityWeatherList)
+                    self.weatherForecastOperation(for: cityWeatherList, onCompletion: onCompletion)
                 }
             case .failure(let error):
                 self.error.value = error
@@ -122,7 +122,7 @@ extension CityVM {
         }
     }
     
-    private func weatherForecastOperation(for cityWeatherList: [CityWeatherForecastResponse.CityWeather]) {
+    private func weatherForecastOperation(for cityWeatherList: [CityWeatherForecastResponse.CityWeather], onCompletion: (() -> ())? = nil) {
         DispatchQueue.global(qos: .userInteractive).async { [weak self] in
             guard let self = self else { return }
             var tempCityForecast = [CityForecastWeatherDataCVCModel]()
@@ -166,8 +166,17 @@ extension CityVM {
                                 tempCityCondition = []
                                 self.cityForecast.value = tempCityForecast.sorted { $0.dt < $1.dt }
                                 tempCityForecast = []
+                                onCompletion?()
                             }
                         }
+                    } else {
+                        print(tempCityCondition)
+                        print(tempCityForecast)
+                        self.cityCondition.value = tempCityCondition.sorted { $0.title < $1.title }
+                        tempCityCondition = []
+                        self.cityForecast.value = tempCityForecast.sorted { $0.dt < $1.dt }
+                        tempCityForecast = []
+                        onCompletion?()
                     }
                 }
             }
@@ -176,5 +185,16 @@ extension CityVM {
     
     private func getWeatherForecast(for location: CLLocation, onCompletion: @escaping (Result<CityWeatherForecastResponse, NetworkError>) -> Void) {
         apiService.request(with: GETWeatherForecastDataURN(location: location, count: 7), onCompletion: onCompletion)
+    }
+}
+
+//testing
+extension CityVM {
+    func testCityForecast(for model: CityForecastWeatherDataCVCModel) {
+        self.cityForecast.value = [model]
+    }
+    
+    func testCityCondition(for model: [CityConditionWeatherDataCVCModel]) {
+        self.cityCondition.value = model
     }
 }

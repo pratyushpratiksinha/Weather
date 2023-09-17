@@ -15,16 +15,14 @@ final class CityListVMTests: XCTestCase {
         let mockCityListAPIServiceSuccess = MockCityListAPIServiceSuccess()
         let viewModel = CityListVM(apiService: mockCityListAPIServiceSuccess)
         viewModel.fireAPIGETWeather(for: CLLocation(latitude: 33.9731, longitude: -118.24)) {
-            print("viewModel.cityList.value", viewModel.cityList.value ?? [])
             XCTAssertTrue((viewModel.cityList.value?.count ?? 0) > 0)
         }
     }
     
-    func testfireAPIGetUserListFaliure() {
+    func testfireAPIGetCityListFaliure() {
         let mockCityListAPIServiceError = MockCityListAPIServiceError()
         let viewModel = CityListVM(apiService: mockCityListAPIServiceError)
         viewModel.fireAPIGETWeather(for: CLLocation(latitude: 0, longitude: 0))
-        print("viewModel.testingError==>", viewModel.error.value?.description ?? "")
         XCTAssertTrue(viewModel.error.value?.description != "")
     }
     
