@@ -2,7 +2,7 @@
 //  CDCityCondition+CoreDataProperties.swift
 //  Weather
 //
-//  Created by Pratyush Pratik Sinha on 16/09/23.
+//  Created by Pratyush Pratik Sinha on 17/09/23.
 //
 //
 
@@ -16,9 +16,9 @@ extension CDCityCondition {
         return NSFetchRequest<CDCityCondition>(entityName: "CDCityCondition")
     }
 
+    @NSManaged public var id: Int64
     @NSManaged public var message: String?
     @NSManaged public var title: String?
-    @NSManaged public var id: Int64
     @NSManaged public var toCity: CDCity?
 
 }

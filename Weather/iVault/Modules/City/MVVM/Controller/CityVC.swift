@@ -79,7 +79,6 @@ class CityVC: UIViewController {
     
     private lazy var cityWeatherDataSource = cityWeatherConfigureDataSource()
 
-    private var temperatureScale: TemperatureScale = .celsius
     private var delegate: CityDetailTopBarDelegate?
     private var cityData: CityTVCModel?
 
@@ -97,7 +96,7 @@ extension CityVC {
     final func set(delegate: CityDetailTopBarDelegate? = nil, cityData: CityTVCModel?, temperatureScale: TemperatureScale) {
         self.delegate = delegate
         self.cityData = cityData
-        self.temperatureScale = temperatureScale
+        viewModel.setTemperatureScale(temperatureScale)
     }
 }
 
@@ -186,8 +185,6 @@ private extension CityVC {
 
 private extension CityVC {
     func setupBinding() {
-        viewModel.setTemperatureScale(temperatureScale)
-        
         if let city = cityData {
             viewModel.setCityData(city)
         }

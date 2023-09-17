@@ -73,46 +73,47 @@ extension CityVM {
     private func offlineWeatherOperationOnTemperatureScaleModifiation(for city: CityTVCModel) {
         DispatchQueue.global(qos: .userInteractive).async { [weak self] in
             guard let self = self else { return }
-            var tempCityForecast = city.forecast
-            var tempCityCondition = city.condition
+            func forecastDataOperation(onCompletion: (CityTVCModel) -> Void) {
+                var city = city
+                var tempCityForecast = city.forecast
+                if let cityForecastList = city.forecast,
+                   cityForecastList.count > 0 {
+                    for index in 0..<cityForecastList.count {
+                        var cityForecast = cityForecastList[index]
+                        cityForecast.temperatureHigh = self.temperatureScale == .celsius ? self.convertFahrenheitToCelsius(cityForecast.temperatureHigh) : self.convertCelsiusToFahrenheit(cityForecast.temperatureHigh)
+                        cityForecast.temperatureLow = self.temperatureScale == .celsius ? self.convertFahrenheitToCelsius(cityForecast.temperatureLow) : self.convertCelsiusToFahrenheit(cityForecast.temperatureLow)
+                        tempCityForecast?[index] = cityForecast
+                        if index == cityForecastList.count - 1 {
+                            city.forecast = tempCityForecast
+                            onCompletion(city)
+                        }
+                    }
+                }
+            }
             
-            if let cityForecastList = city.forecast,
-               cityForecastList.count > 0 {
-                for index in 0..<cityForecastList.count {
-                    var cityForecast = cityForecastList[index]
-                    cityForecast.temperatureHigh = self.temperatureScale == .celsius ? (city.scale == "" ? cityForecast.temperatureHigh : self.convertFahrenheitToCelsius(cityForecast.temperatureHigh)) : self.convertCelsiusToFahrenheit(cityForecast.temperatureHigh)
-                    cityForecast.temperatureLow = self.temperatureScale == .celsius ? (city.scale == "" ? cityForecast.temperatureLow : self.convertFahrenheitToCelsius(cityForecast.temperatureLow)) : self.convertCelsiusToFahrenheit(cityForecast.temperatureLow)
-                    tempCityForecast?[index] = cityForecast
-                    if index == cityForecastList.count - 1 {
-                        self.cityData?.forecast = tempCityForecast
-                        if let cityData = self.cityData {
-                            self.cdCityManager.update(record: cityData) { (isCityRecordUpdated) in
+            func conditionDataOperation() {
+                forecastDataOperation { city in
+                    var city = city
+                    var tempCityCondition = city.condition
+                    if let cityCondition = city.condition,
+                       cityCondition.count > 0 {
+                        for index in 0..<cityCondition.count where city.condition?[index].title == WeatherCondition.feelsLike.title {
+                            guard let value = Double(city.condition?[index].message ?? "") else { return }
+                            let temperatureScaleValue: String = "\(Int(self.temperatureScale == .celsius ? self.convertFahrenheitToCelsius(value) : self.convertCelsiusToFahrenheit(value)))"
+                            tempCityCondition?[index].message = temperatureScaleValue
+                            city.condition = tempCityCondition
+                            city.scale = self.temperatureScale.rawValue
+                            self.cdCityManager.update(record: city) { (isCityRecordUpdated) in
                                 if isCityRecordUpdated {
-                                    self.cityForecast.value = tempCityForecast?.sorted { $0.dt < $1.dt }
+                                    self.cityForecast.value = city.forecast?.sorted { $0.dt < $1.dt }
+                                    self.cityCondition.value = tempCityCondition?.sorted { $0.title < $1.title }
                                 }
                             }
                         }
                     }
                 }
             }
-            
-            if let cityCondition = city.condition,
-               cityCondition.count > 0 {
-                for index in 0..<cityCondition.count where city.condition?[index].title == WeatherCondition.feelsLike.title {
-                    guard let value = Double(city.condition?[index].message ?? "") else { return }
-                    let temperatureScaleValue: String = "\(Int(self.temperatureScale == .celsius ? (city.scale == "" ? value : self.convertFahrenheitToCelsius(value)) : self.convertCelsiusToFahrenheit(value)))"
-                    tempCityCondition?[index].message = temperatureScaleValue
-                    self.cityData?.condition = tempCityCondition
-                    self.cityData?.scale = self.temperatureScale.rawValue
-                    if let cityData = self.cityData {
-                        self.cdCityManager.update(record: cityData) { (isCityRecordUpdated) in
-                            if isCityRecordUpdated {
-                                self.cityCondition.value = tempCityCondition?.sorted { $0.title < $1.title }
-                            }
-                        }
-                    }
-                }
-            }
+            conditionDataOperation()
         }
     }
     
@@ -122,8 +123,8 @@ extension CityVM {
             var tempCityForecast = [CityForecastWeatherDataCVCModel]()
             var tempCityCondition = [CityConditionWeatherDataCVCModel]()
             for index in 0..<cityWeatherList.count {
-                let temperatureHighInCelcius = self.convertKelvinToCelsius(cityWeatherList[index].main.tempMax)
-                let temperatureLowInCelcius = self.convertKelvinToCelsius(cityWeatherList[index].main.tempMin)
+                let temperatureHighInCelcius = self.convertKelvinToCelsius(cityWeatherList[index].main?.tempMax ?? 0.0)
+                let temperatureLowInCelcius = self.convertKelvinToCelsius(cityWeatherList[index].main?.tempMin ?? 0.0)
                 let icon = BaseUrl.icon.rawValue + EndPoints.icon.rawValue + (cityWeatherList[index].weather?.first?.icon ?? "") + ImageType.png.rawValue
                 let cityForecast = CityForecastWeatherDataCVCModel(id: cityWeatherList[index].dt,
                                                                    dt: (cityWeatherList.first?.dt ?? 0) + (index * 24 * 3600),
@@ -134,7 +135,7 @@ extension CityVM {
                 tempCityForecast.append(cityForecast)
                 
                 if index == 0 {
-                    let condtionDict: [String: Any?] = cityWeatherList.first?.main.asDictionary ?? [:]
+                    let condtionDict: [String: Any?] = cityWeatherList.first?.main?.asDictionary ?? [:]
                     for (key, value) in condtionDict {
                         if let condition = WeatherCondition(rawValue: key) {
                             if condition == .feelsLike {
@@ -165,8 +166,6 @@ extension CityVM {
                             }
                         }
                     } else {
-                        print(tempCityCondition)
-                        print(tempCityForecast)
                         self.cityCondition.value = tempCityCondition.sorted { $0.title < $1.title }
                         tempCityCondition = []
                         self.cityForecast.value = tempCityForecast.sorted { $0.dt < $1.dt }

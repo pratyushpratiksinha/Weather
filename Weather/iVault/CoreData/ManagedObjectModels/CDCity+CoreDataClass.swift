@@ -2,7 +2,7 @@
 //  CDCity+CoreDataClass.swift
 //  Weather
 //
-//  Created by Pratyush Pratik Sinha on 16/09/23.
+//  Created by Pratyush Pratik Sinha on 17/09/23.
 //
 //
 

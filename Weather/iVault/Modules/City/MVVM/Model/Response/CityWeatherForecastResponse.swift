@@ -28,21 +28,24 @@ extension CityWeatherForecastResponse {
     // MARK: - List
     struct CityWeather: Decodable, Hashable {
         let dt: Int
-        let main: Main
+        let main: Main?
         let weather: [Weather]?
         let clouds: Clouds?
         let wind: Wind?
-        let visibility, pop: Int?
+        let visibility: Int?
+        let pop: Double?
         let sys: Sys?
         let dtTxt: String?
+        let rain: Rain?
 
         enum CodingKeys: String, CodingKey {
             case dt, main, weather, clouds, wind, visibility, pop, sys
             case dtTxt = "dt_txt"
+            case rain
         }
         
         static func == (lhs: CityWeather, rhs: CityWeather) -> Bool {
-            lhs.dt == rhs.dt && lhs.main == rhs.main && lhs.weather == rhs.weather && lhs.clouds == rhs.clouds && lhs.wind == rhs.wind && lhs.visibility == rhs.visibility && lhs.pop == rhs.pop && lhs.sys == rhs.sys && lhs.dtTxt == rhs.dtTxt
+            lhs.dt == rhs.dt && lhs.main == rhs.main && lhs.weather == rhs.weather && lhs.clouds == rhs.clouds && lhs.wind == rhs.wind && lhs.visibility == rhs.visibility && lhs.pop == rhs.pop && lhs.sys == rhs.sys && lhs.dtTxt == rhs.dtTxt && lhs.rain == rhs.rain
         }
     }
 }
@@ -62,11 +65,11 @@ extension CityWeatherForecastResponse.CityWeather {
     
     // MARK: - Main
     struct Main: Decodable, Hashable {
-        let temp, tempMin, tempMax: Double
+        let temp, tempMin, tempMax: Double?
         let feelsLike: Double?
         let pressure, seaLevel, grndLevel, humidity: Int?
         let tempKf: Double?
-        
+
         var asDictionary : [String: Any?] {
           let mirror = Mirror(reflecting: self)
           let dict = Dictionary(uniqueKeysWithValues: mirror.children.lazy.map({ (label:String?, value:Any) -> (String, Any)? in
@@ -105,5 +108,14 @@ extension CityWeatherForecastResponse.CityWeather {
         let speed: Double?
         let deg: Int?
         let gust: Double?
+    }
+    
+    // MARK: - Rain
+    struct Rain: Codable, Hashable {
+        let the3H: Double?
+
+        enum CodingKeys: String, CodingKey {
+            case the3H = "3h"
+        }
     }
 }

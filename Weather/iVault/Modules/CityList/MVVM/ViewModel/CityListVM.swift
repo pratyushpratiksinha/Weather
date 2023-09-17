@@ -58,18 +58,16 @@ extension CityListVM {
     
     final func displayConvertedTemperature(temperatureScale: TemperatureScale) {
         self.temperatureScale = temperatureScale
-        var tempCityListValue = cityList.value ?? []
-        if let value = cityList.value {
-            for index in 0..<value.count {
-                tempCityListValue[index].temperatureCurrent = temperatureScale == .fahrenheit ? convertCelsiusToFahrenheit(tempCityListValue[index].temperatureCurrent) : convertFahrenheitToCelsius(tempCityListValue[index].temperatureCurrent)
-                tempCityListValue[index].temperatureHigh = temperatureScale == .fahrenheit ? convertCelsiusToFahrenheit(tempCityListValue[index].temperatureHigh) : convertFahrenheitToCelsius(tempCityListValue[index].temperatureHigh)
-                tempCityListValue[index].temperatureLow = temperatureScale == .fahrenheit ? convertCelsiusToFahrenheit(tempCityListValue[index].temperatureLow) : convertFahrenheitToCelsius(tempCityListValue[index].temperatureLow)
-                if index == value.count - 1 {
-                    cdCityManager.update(records: tempCityListValue) { [weak self] (isCityRecordUpdated) in
-                        guard let self = self else { return }
-                        if isCityRecordUpdated {
-                            self.cityList.value = self.cdCityManager.getAll()
-                        }
+        var tempCityListValue = cdCityManager.getAll() ?? []
+        for index in 0..<tempCityListValue.count {
+            tempCityListValue[index].temperatureCurrent = temperatureScale == .fahrenheit ? convertCelsiusToFahrenheit(tempCityListValue[index].temperatureCurrent) : convertFahrenheitToCelsius(tempCityListValue[index].temperatureCurrent)
+            tempCityListValue[index].temperatureHigh = temperatureScale == .fahrenheit ? convertCelsiusToFahrenheit(tempCityListValue[index].temperatureHigh) : convertFahrenheitToCelsius(tempCityListValue[index].temperatureHigh)
+            tempCityListValue[index].temperatureLow = temperatureScale == .fahrenheit ? convertCelsiusToFahrenheit(tempCityListValue[index].temperatureLow) : convertFahrenheitToCelsius(tempCityListValue[index].temperatureLow)
+            if index == tempCityListValue.count - 1 {
+                cdCityManager.update(records: tempCityListValue) { [weak self] (isCityRecordUpdated) in
+                    guard let self = self else { return }
+                    if isCityRecordUpdated {
+                        self.cityList.value = self.cdCityManager.getAll()
                     }
                 }
             }
@@ -105,7 +103,8 @@ extension CityListVM {
                                                temperatureCurrent: self.temperatureScale == .celsius ? temperatureCurrentInCelcius : self.convertCelsiusToFahrenheit(temperatureCurrentInCelcius),
                                                temperatureHigh: self.temperatureScale == .celsius ? temperatureHighInCelcius : self.convertCelsiusToFahrenheit(temperatureHighInCelcius),
                                                temperatureLow: self.temperatureScale == .celsius ? temperatureLowInCelcius : self.convertCelsiusToFahrenheit(temperatureLowInCelcius),
-                                               location: CLLocation(latitude: city.coord.lat, longitude: city.coord.lon))
+                                               location: CLLocation(latitude: city.coord.lat, longitude: city.coord.lon),
+                                               scale: self.temperatureScale.rawValue)
                     if self.cityList.value == nil {
                         self.cdCityManager.create(record: element) { isCreatedCityRecord in
                             if isCreatedCityRecord {

@@ -2,7 +2,7 @@
 //  CDCity+CoreDataProperties.swift
 //  Weather
 //
-//  Created by Pratyush Pratik Sinha on 16/09/23.
+//  Created by Pratyush Pratik Sinha on 17/09/23.
 //
 //
 
@@ -22,11 +22,11 @@ extension CDCity {
     @NSManaged public var id: Int64
     @NSManaged public var latitude: Double
     @NSManaged public var longitude: Double
-    @NSManaged public var scale: String?
     @NSManaged public var temperatureCurrent: Double
     @NSManaged public var temperatureHigh: Double
     @NSManaged public var temperatureLow: Double
     @NSManaged public var weatherDescription: String?
+    @NSManaged public var scale: String?
     @NSManaged public var toForecast: Set<CDCityForecast>?
     @NSManaged public var toCondition: Set<CDCityCondition>?
 
