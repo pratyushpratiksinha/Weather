@@ -561,19 +561,10 @@
 			isa = PBXGroup;
 			children = (
 				81F4F0072AAF6BFE007C4C41 /* Constants */,
-				81ECAE832AAF0E470086E341 /* Library */,
 				81ECAE862AAF10150086E341 /* Structural */,
 				81ECAE8A2AAF10990086E341 /* Utilities */,
 			);
 			path = Auxiliary;
-			sourceTree = "<group>";
-		};
-		81ECAE832AAF0E470086E341 /* Library */ = {
-			isa = PBXGroup;
-			children = (
-				81ECAE842AAF0E6C0086E341 /* NetworkReachabilityManager.swift */,
-			);
-			path = Library;
 			sourceTree = "<group>";
 		};
 		81ECAE862AAF10150086E341 /* Structural */ = {
@@ -605,6 +596,7 @@
 				81ECAE9A2AAF2CAC0086E341 /* Bindable.swift */,
 				81C0A4732AAFB4F3009319D7 /* Loader.swift */,
 				81F971D62AB07AB900DC8F6D /* Location.swift */,
+				81ECAE842AAF0E6C0086E341 /* NetworkReachabilityManager.swift */,
 				81F971D42AB0747C00DC8F6D /* NilDataHandler.swift */,
 				81F971DA2AB09D9400DC8F6D /* Popover.swift */,
 				81D430FD2AB0E5820041966D /* TemperatureScale.swift */,
