@@ -27,7 +27,7 @@ The Weather Project is a user-friendly mobile application that provides real-tim
 
 | List of cities | City details |
 |--------------|-------------|
-|![List of cities](https://github.com/pratyushpratik/Weather/assets/17877604/eee76ef2-ba77-4e2a-803a-d2ff310ba532)|![City details](https://github.com/pratyushpratik/Weather/assets/17877604/8f2c0201-5ab0-4823-a1bc-b870687f54ce)
+|![List of cities](https://github.com/pratyushpratik/Weather/assets/17877604/22f66607-5112-4af3-b22e-f4782708a2df)|![City details](https://github.com/pratyushpratik/Weather/assets/17877604/37d39672-a0f3-47e5-a663-201c880a5d80)
 
   
 ## Requirements
