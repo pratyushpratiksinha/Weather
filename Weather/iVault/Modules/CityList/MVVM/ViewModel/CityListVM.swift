@@ -41,7 +41,11 @@ extension CityListVM {
         if let cityListRecords = cdCityManager.getAll(),
            cityListRecords.count > 0 {
             onCompletion(true)
-            cityList.value = cityListRecords
+            if NetworkReachabilityManager()?.isReachable == true {
+                updateDataForDBData(cityListRecords)
+            } else {
+                cityList.value = cityListRecords
+            }
         } else {
             onCompletion(false)
         }
@@ -67,8 +71,19 @@ extension CityListVM {
                 cdCityManager.update(records: tempCityListValue) { [weak self] (isCityRecordUpdated) in
                     guard let self = self else { return }
                     if isCityRecordUpdated {
-                        self.cityList.value = self.cdCityManager.getAll()
+                        self.cityList.value = self.cdCityManager.getAll()?.sorted { ($0.index ?? 0) < ($1.index ?? 0) }
                     }
+                }
+            }
+        }
+    }
+    
+    final func updateDataForDBData(_ cityList: [CityTVCModel]) {
+        self.temperatureScale = getTemperatureScaleFromUserDefaults() ?? .celsius
+        for index in 0..<cityList.count {
+            fireAPIUpdateWeatherForDBData(for: cityList[index].id, location: cityList[index].location) {
+                if index == cityList.count - 1 {
+                    self.cityList.value = self.cdCityManager.getAll()?.sorted { ($0.index ?? 0) < ($1.index ?? 0) }
                 }
             }
         }
@@ -131,6 +146,47 @@ extension CityListVM {
                                         error.description)
             }
         }
+    }
+    
+    final func fireAPIUpdateWeatherForDBData(for id: Int, location: CLLocation, onCompletion: @escaping () -> ()) {
+        cdCityManager.get(byIdentifier: id) { [weak self] (cdCity) in
+            guard let self = self else { return }
+            self.getWeather(for: location) { (result) in
+                switch result {
+                case .success(let city):
+                    DispatchQueue.global(qos: .userInteractive).async {
+                        let temperatureCurrentInCelcius = self.convertKelvinToCelsius(city.main.temp)
+                        let temperatureHighInCelcius = self.convertKelvinToCelsius(city.main.tempMax)
+                        let temperatureLowInCelcius = self.convertKelvinToCelsius(city.main.tempMin)
+                        var backgroundImage: String?
+                        
+                        if (city.dt ?? 0) > (city.sys.sunrise ?? 0) && (city.dt ?? 0) < (city.sys.sunset ?? 0) {
+                            backgroundImage = WeatherDescription(rawValue: city.weather?.first?.description ?? "")?.dayImage
+                        } else {
+                            backgroundImage = WeatherDescription(rawValue: city.weather?.first?.description ?? "")?.nightImage
+                        }
+                        
+                        if let cdCity = cdCity {
+                            var element = cdCity
+                            element.weatherDescription = city.weather?.first?.description ?? ""
+                            element.backgroundImage = backgroundImage
+                            element.temperatureCurrent = self.temperatureScale == .celsius ? temperatureCurrentInCelcius : self.convertCelsiusToFahrenheit(temperatureCurrentInCelcius)
+                            element.temperatureHigh = self.temperatureScale == .celsius ? temperatureHighInCelcius : self.convertCelsiusToFahrenheit(temperatureHighInCelcius)
+                            element.temperatureLow = self.temperatureScale == .celsius ? temperatureLowInCelcius : self.convertCelsiusToFahrenheit(temperatureLowInCelcius)
+                            
+                            self.cdCityManager.update(record: element) { isUpdatedCityRecord in
+                                if isUpdatedCityRecord {
+                                    onCompletion()
+                                }
+                            }
+                        }
+                    }
+                case .failure(let error):
+                    self.error.value = error
+                }
+            }
+        }
+        
     }
     
     private func getWeather(for location: CLLocation, onCompletion: @escaping (Result<CityWeatherResponse, NetworkError>) -> Void) {

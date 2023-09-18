@@ -50,6 +50,9 @@ struct UserDefault<Value> {
 
 extension UserDefaults {
 
-    @UserDefault(key: UserDefaultsKeys.temperatureScale.rawValue)
+    @UserDefault(key: UserDefaultsKeys.temperatureScale.rawValue, defaultValue: TemperatureScale.celsius.rawValue)
     static var temperatureScale: String?
+    
+    @UserDefault(key: UserDefaultsKeys.elementCounter.rawValue, defaultValue: 0)
+    static var elementCounter: Int?
 }

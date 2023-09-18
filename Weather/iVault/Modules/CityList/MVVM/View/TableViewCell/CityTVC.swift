@@ -10,10 +10,11 @@ import CoreLocation
 
 struct CityTVCModel: Hashable {
     let id: Int
+    var index: Int?
     let cityName: String
     let countryName: String
-    let weatherDescription: String
-    let backgroundImage: String?
+    var weatherDescription: String
+    var backgroundImage: String?
     var temperatureCurrent: Double
     var temperatureHigh: Double
     var temperatureLow: Double
@@ -28,7 +29,7 @@ struct CityTVCModel: Hashable {
     }
     
     static func == (lhs: CityTVCModel, rhs: CityTVCModel) -> Bool {
-        lhs.id == rhs.id && lhs.cityName == rhs.cityName && lhs.countryName == rhs.countryName && lhs.weatherDescription == rhs.weatherDescription && lhs.backgroundImage == rhs.backgroundImage && lhs.temperatureCurrent == rhs.temperatureCurrent && lhs.temperatureHigh == rhs.temperatureHigh && lhs.temperatureLow == rhs.temperatureLow && lhs.location == rhs.location && lhs.scale == rhs.scale && lhs.forecast == rhs.forecast  && lhs.condition == rhs.condition
+        lhs.id == rhs.id && lhs.cityName == rhs.cityName && lhs.countryName == rhs.countryName && lhs.weatherDescription == rhs.weatherDescription && lhs.backgroundImage == rhs.backgroundImage && lhs.temperatureCurrent == rhs.temperatureCurrent && lhs.temperatureHigh == rhs.temperatureHigh && lhs.temperatureLow == rhs.temperatureLow && lhs.location == rhs.location
     }
 }
 

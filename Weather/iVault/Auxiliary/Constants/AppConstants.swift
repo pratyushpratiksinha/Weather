@@ -31,6 +31,7 @@ enum ReusableIdentifierCRV: String {
 //keys for saving and retrieving from UserDefaults
 enum UserDefaultsKeys: String {
     case temperatureScale = "temperatureScale"
+    case elementCounter = "elementCounter"
 }
 
 //MARK: - ElementOperation

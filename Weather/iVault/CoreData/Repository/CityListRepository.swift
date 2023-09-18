@@ -18,6 +18,8 @@ struct CityListRepository : CityListDataRepository {
         PersistentStorage.shared.persistentContainer.performBackgroundTask { privateManagedContext in
             let cdCity = CDCity(context: privateManagedContext)
             cdCity.id = Int64(record.id)
+            cdCity.index = Int64((UserDefaults.elementCounter ?? 0) + 1)
+            UserDefaults.elementCounter = (UserDefaults.elementCounter ?? 0) + 1
             cdCity.cityName = record.cityName
             cdCity.countryName = record.countryName
             cdCity.weatherDescription = record.weatherDescription
